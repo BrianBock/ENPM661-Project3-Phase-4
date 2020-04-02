@@ -8,7 +8,7 @@ from robot import Robot
 
 write_to_video = False
 show_visualization = True
-userInput = True
+userInput = False
 
 # Construct maze object
 maze = Maze('maze.txt')

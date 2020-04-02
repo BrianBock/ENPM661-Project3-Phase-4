@@ -12,8 +12,8 @@ class Robot:
     def __init__(self,maze,userInput):
         self.maze = maze
         self.pos_thresh = .5
-        self.ang_thresh = 30
-        self.goal_radius = 1.5
+        self.ang_thresh = 10
+        self.goal_radius = 200
         #Robot params
         self.clearance = 15
         self.radius = 177 # Robot radius
@@ -25,8 +25,8 @@ class Robot:
             self.get_user_nodes()
         else:
             self.start = (1100,1000,30)
-            self.goal = (8160,4080)
-            self.d = 10
+            self.goal = (1200,1000)
+            # self.d = 10
 
         
         self.offset=self.clearance+self.radius
@@ -126,8 +126,8 @@ class Robot:
 
         x = int(self.trunc(x,self.pos_thresh)*(1/self.pos_thresh))
         y = int(self.trunc(y,self.pos_thresh)*(1/self.pos_thresh))
-        if theta < 0:
-            theta = 360+round(theta)
+        # if theta < 0:
+        #     theta = 360+round(theta)
         theta = int(theta*(1/self.ang_thresh))
 
 
@@ -136,8 +136,8 @@ class Robot:
 
 
     def A_star(self):
-        def take_second(elem):
-            return elem[1]
+        self.maze.generate_constraints(self.offset)
+
         # each node = (x,y,theta) <- floats
         # nodes = [node1,node2,..,node_n]
         self.nodes = []
@@ -150,50 +150,60 @@ class Robot:
         visited_nodes = np.zeros((size_x,size_y,size_th))
         start_disc = self.discretize(self.start)
         visited_nodes[start_disc[0],start_disc[1],start_disc[2]] = 1 #set start node as checked
+
+        print(visited_nodes.shape)
         
         # costs = 3D matrix where at discretized point is tuple (cost2come,cost2goal)
-        self.costs2come = np.full((visited_nodes.shape[0],visited_nodes.shape[1],visited_nodes.shape[2]),np.inf)
-        self.costs2goal = np.full((visited_nodes.shape[0],visited_nodes.shape[1],visited_nodes.shape[2]),np.inf)
+        self.costs2come = np.full((visited_nodes.shape[0],visited_nodes.shape[1],visited_nodes.shape[2]),1)
+        self.costs2goal = np.full((visited_nodes.shape[0],visited_nodes.shape[1],visited_nodes.shape[2]),1)
         cost2come = 0
         self.costs2come[start_disc[0],start_disc[1],start_disc[2]] = cost2come
         cost2goal = math.sqrt((self.goal[0] - self.start[0])**2 + (self.goal[1] - self.start[1])**2)
         
         # parents = 3D matrix of size h/thresh,w/thresh,360/th_thresh index is ind of parent in nodes
-        self.parents = np.full((visited_nodes.shape[0],visited_nodes.shape[1],visited_nodes.shape[2]),np.nan)
+        self.parents = np.full((visited_nodes.shape[0],visited_nodes.shape[1],visited_nodes.shape[2]),0)
         self.parents[start_disc[0],start_disc[1],start_disc[2]] = -1 #set parent of start node to -1
         
         # queue needs to be a list of tuples (node_ind,cost2come+cost2goal)
-        queue = [(0,cost2come+cost2goal)]
+        queue_inds = [0]
+        queue_costs = [cost2come+cost2goal]
     
-        self.foundGoal = False    
+        self.foundGoal = False 
 
-        while queue:
-            #sort queue
-            queue.sort(key = take_second)
+        while queue_inds:
             # Set the current node as the top of the queue and remove it
-            parent,distance = queue.pop(0)
+            parent = queue_inds.pop(0)
+            cost = queue_costs.pop(0)
 
             cur_node = self.nodes[parent]
             cur_disc = self.discretize(cur_node)
+
             cost2come = self.costs2come[cur_disc[0],cur_disc[1],cur_disc[2]]
 
             neighbors = self.check_neighbors(cur_node)
 
             for p in neighbors:
                 cost2goal = math.sqrt((self.goal[0] - p[0])**2 + (self.goal[1] - p[1])**2)
+                print(cost2goal)
                 disc_p = self.discretize(p)
                 if visited_nodes[disc_p[0],disc_p[1],disc_p[2]] == 0: 
                     visited_nodes[disc_p[0],disc_p[1],disc_p[2]] = 1
                     self.costs2come[disc_p[0],disc_p[1],disc_p[2]] = cost2come+self.d
                     self.parents[disc_p[0],disc_p[1],disc_p[2]] = parent
                     self.nodes.append(p)
-                    queue.append((len(self.nodes)-1,cost2goal))
+
+                    cost_fun = cost2come+self.d+cost2goal
+                    sorted_ind = bisect.bisect_right(queue_costs,cost_fun)
+                    queue_inds.insert(sorted_ind,(len(self.nodes)-1))
+                    queue_costs.insert(sorted_ind,cost_fun)
+
                 elif cost2come + self.d < self.costs2come[disc_p[0],disc_p[1],disc_p[2]]:
                     self.costs2come[disc_p[0],disc_p[1],disc_p[2]] = cost2come+self.d
                     self.parents[disc_p[0],disc_p[1],disc_p[2]] = parent
+
                 if cost2goal<self.goal_radius:
                     self.foundGoal = True
-                    queue.clear()
+                    queue_inds.clear()
                     break
 
 
@@ -401,4 +411,6 @@ class Robot:
             out_plt.release()
             
 
-
+if __name__ == '__main__':
+    
+    print(trunc(5,1))

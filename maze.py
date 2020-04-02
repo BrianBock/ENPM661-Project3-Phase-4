@@ -12,7 +12,7 @@ class Maze:
         self.read_obstacles()
 
 
-        self.fig = plt.figure(figsize=(8, 7))
+        self.fig = plt.figure(figsize=(8, 8))
         self.ax = self.fig.subplots()
 
         major_ticks_x = np.arange(0, self.width+1, self.width/5)
@@ -64,22 +64,17 @@ class Maze:
             return False
 
 
-    def in_obstacle(self,node,offset):
-        x = node[0]
-        y = node[1]
-       
+    def generate_constraints(self,offset):
+        self.constraints = []
         for obs in self.obstacles:
             if obs['type'] == 'c':
-                center = obs['center']
-                radius = obs['radius']+ offset
-                if ((x-center[0])**2 + (y-center[1])**2 <= radius**2):
-                    return True
+                constraint = {'type':'c','center':obs['center'],'radius':obs['radius']+ offset}
+                self.constraints.append(constraint)
+            
             elif obs['type'] == 'e':
-                center = obs['center']
-                a1 = obs['axis'][0]+ offset
-                a2 = obs['axis'][1]+ offset
-                if ((((x-center[0])**2)/a1**2) + (((y-center[1])**2)/a2**2) <= 1):
-                    return True
+                constraint = {'type':'e','center':obs['center'],'a1':obs['axis'][0]+ offset,'a2':obs['axis'][1]+ offset}
+                self.constraints.append(constraint)
+            
             elif obs['type'] == 'p' or obs['type'] == 'rr':
                 points=obs['points'].copy()
                 points.append(points[0])
@@ -118,8 +113,32 @@ class Maze:
                     a.append(ai)
                     b.append(bi)
                     c.append(ci)
+                
+                constraint = {'type':'p','a':a,'b':b,'c':c}
+                self.constraints.append(constraint)
+
+
+    def in_obstacle(self,node,offset):
+        x = node[0]
+        y = node[1]
+       
+        for constraint in self.constraints:
+            if constraint['type'] == 'c':
+                center = constraint['center']
+                radius = constraint['radius']
+                if ((x-center[0])**2 + (y-center[1])**2 <= radius**2):
+                    return True
+            elif constraint['type'] == 'e':
+                center = constraint['center']
+                a1 = constraint['a1']
+                a2 = constraint['a2']
+                if ((((x-center[0])**2)/a1**2) + (((y-center[1])**2)/a2**2) <= 1):
+                    return True
+            elif constraint['type'] == 'p':
                 count=0
-  
+                a = constraint['a']
+                b = constraint['b']
+                c = constraint['c']
                 for i in range(len(a)):
                     if ((a[i]*x + b[i]*y + c[i]) >= 0):
                         count+=1
