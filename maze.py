@@ -9,13 +9,16 @@ class Maze:
     def __init__(self,filename):
         # instatiates an object of class maze
         self.filename = filename
-        self.fig = plt.figure(figsize=(12, 8))
+        self.read_obstacles()
+
+
+        self.fig = plt.figure(figsize=(8, 7))
         self.ax = self.fig.subplots()
 
-        major_ticks_x = np.arange(0, 301, 50)
-        minor_ticks_x = np.arange(0, 301, 10)
-        major_ticks_y = np.arange(0, 201, 50)
-        minor_ticks_y = np.arange(0, 201, 10)
+        major_ticks_x = np.arange(0, self.width+1, self.width/10)
+        minor_ticks_x = np.arange(0, self.width+1, self.width/20)
+        major_ticks_y = np.arange(0, self.height+1, self.height/10)
+        minor_ticks_y = np.arange(0, self.height+1, self.height/20)
 
         self.ax.set_xticks(major_ticks_x)
         self.ax.set_xticks(minor_ticks_x, minor=True)
@@ -25,8 +28,8 @@ class Maze:
         self.ax.grid(which='minor', alpha=0.2)
         self.ax.grid(which='major', alpha=0.5)
 
-        self.ax.set_xlim(0, 300)
-        self.ax.set_ylim(0, 200)
+        self.ax.set_xlim(0, self.width)
+        self.ax.set_ylim(0, self.height)
 
         self.ax.set_aspect('equal')
 
@@ -35,7 +38,7 @@ class Maze:
         plt.title("Maze")
 
         self.patches = []
-        self.read_obstacles()        
+                
 
         for obs in self.obstacles:
             if obs['type'] == 'c': # circle
