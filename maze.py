@@ -15,9 +15,9 @@ class Maze:
         self.fig = plt.figure(figsize=(8, 7))
         self.ax = self.fig.subplots()
 
-        major_ticks_x = np.arange(0, self.width+1, self.width/10)
+        major_ticks_x = np.arange(0, self.width+1, self.width/5)
         minor_ticks_x = np.arange(0, self.width+1, self.width/20)
-        major_ticks_y = np.arange(0, self.height+1, self.height/10)
+        major_ticks_y = np.arange(0, self.height+1, self.height/5)
         minor_ticks_y = np.arange(0, self.height+1, self.height/20)
 
         self.ax.set_xticks(major_ticks_x)
