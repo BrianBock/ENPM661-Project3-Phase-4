@@ -1,21 +1,19 @@
 import numpy as np
+import math
 
-def trunc(a,thresh):
-    dec_a = a % 1
-    int_a = a//1
+def arb_round(a,thresh):
+    remainder=a%thresh
+    if remainder<thresh/2:
+        # round down
+        b=math.floor(a/thresh)
+        
+    else:
+        #round up
+        b=math.ceil(a/thresh)
+    
+    arb_round_a=thresh*b
 
-    if dec_a % thresh < thresh/100:
-        trunc_a = int_a + dec_a
-    else: 
-        for val in np.arange(0,1,thresh):
-            if(dec_a-val)<=thresh:
-                if abs(dec_a-(val)) < abs(dec_a-(val+thresh)):
-                    trunc_a = int_a+val
-                else:
-                    trunc_a = int_a+(val+thresh)
-                break
-
-    return trunc_a
+    return arb_round_a
 
 if __name__ == "__main__":
-    print(trunc(104,5))
+    print(trunc(12.1,7))

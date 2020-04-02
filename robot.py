@@ -118,18 +118,38 @@ class Robot:
 
         return trunc_a
 
+    def arb_round(self,a,thresh):
+        remainder=a%thresh
+        if remainder<thresh/2:
+            # round down
+            b=math.floor(a/thresh)
+            
+        else:
+            #round up
+            b=math.ceil(a/thresh)
+        
+        arb_round_a=thresh*b
+
+        return arb_round_a
+
 
     def discretize(self,point):
         x=point[0]
         y=point[1]
         theta=point[2]
 
-        x = int(self.trunc(x,self.pos_thresh)*(1/self.pos_thresh))
-        y = int(self.trunc(y,self.pos_thresh)*(1/self.pos_thresh))
-        # if theta < 0:
-        #     theta = 360+round(theta)
-        theta = int(theta*(1/self.ang_thresh))
-
+        if self.thresh<1:
+            x = int(self.trunc(x,self.pos_thresh)*(1/self.pos_thresh))
+            y = int(self.trunc(y,self.pos_thresh)*(1/self.pos_thresh))
+            # if theta < 0:
+            #     theta = 360+round(theta)
+            theta = int(theta*(1/self.ang_thresh))
+        else:
+            x = int(self.arb_round(x,self.pos_thresh)*(1/self.pos_thresh))
+            y = int(self.arb_round(y,self.pos_thresh)*(1/self.pos_thresh))
+            # if theta < 0:
+            #     theta = 360+round(theta)
+            theta = int(theta*(1/self.ang_thresh))
 
         new_point=(x,y,theta)
         return new_point
