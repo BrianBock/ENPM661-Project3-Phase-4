@@ -33,7 +33,7 @@ The first parameters needed to establish a maze is the height and width of the m
     height: XX
     width: XX
 
-The code currently supports four different types of obstacles; circles, ellipses, polygons, and rotated rectangles. Depending on the type of obstacle you want to generate, different parameters are needed. 
+The code currently supports four different types of obstacles; circles, ellipses, polygons, and rotated rectangles. Depending on the type of obstacle you want to generate, different parameters are needed. All coordinates are in Cartesian coordinates, with the origin at the bottom left corner of the maze.  
 
 ### Circle
 For a circle the file needs to contain a center point (x,y) and a radius (r). The lines in text file should look like this
@@ -54,7 +54,7 @@ To add a rotated rectangle obstacle you need to specify the center point (x,y), 
         
 
 ### Polygon
-To add a polygon obstacle you need to specify all points that make up the exterior of the polygon in the form (x,y). The program will draw lines between each point so the order matters. The lines in text file should look like this
+To add a polygon obstacle you need to specify all points that make up the exterior of the polygon in the form (x,y). The program will draw lines between each point so the order matters - they must be defined clockwise. It does not matter which point you start from. The lines in text file should look like this
 
     polygon
         point: x1,y1
