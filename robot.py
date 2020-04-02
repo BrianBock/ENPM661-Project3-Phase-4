@@ -14,15 +14,20 @@ class Robot:
         self.pos_thresh = .5
         self.ang_thresh = 30
         self.goal_radius = 1.5
+        #Robot params
+        self.clearance = 15
+        self.radius = 177 # Robot radius
+        self.wheel_radius=76
+        self.L=230 # Wheel distance #http://robotics.caltech.edu/wiki/images/9/9a/CSME133a_Lab2_Instructions.pdf
+        self.move_time=1
 
         if userInput:
             self.get_user_nodes()
         else:
-            self.start = (50,30,30)
-            self.goal = (150,150)
+            self.start = (1100,1000,30)
+            self.goal = (8160,4080)
             self.d = 10
-            self.clearance = 3
-            self.radius = 5
+
         
         self.offset=self.clearance+self.radius
 
@@ -33,30 +38,50 @@ class Robot:
 
         
     def move(self,point,direction):
-        d=self.d
         x = point[0]
         y = point[1]
         theta = np.deg2rad(point[2])
 
-        if direction == 'left60':
-            phi=np.deg2rad(60)
-        elif direction == 'left30':
-            phi=np.deg2rad(30)
-        elif direction == 'straight':
-            phi=0
-        elif direction == 'right30':
-            phi=np.deg2rad(-30)
-        elif direction == 'right60':
-            phi=np.deg2rad(-60)
+        if direction == "FastFast":
+            ul=self.fast
+            ur=self.fast
+        elif direction == "FastSlow":
+            ul=self.fast
+            ur=self.slow
+        elif direction == "Fast0":
+            ul=self.fast
+            ur=0
+        elif direction == "SlowFast":
+            ul=self.slow
+            ur=self.fast
+        elif direction == "SlowSlow":
+            ul=self.slow
+            ur=self.slow
+        elif direction == "Slow0":
+            ul=self.slow
+            ur=0
+        elif direction == "0Fast":
+            ul=0
+            ur=self.fast
+        elif direction == "0Slow":
+            ul=0
+            ur=self.slow
 
-        new_x=x+d*math.cos(theta+phi)
-        new_y=y+d*math.sin(theta+phi)
 
-        new_theta = round(np.rad2deg(theta+phi))
-        if new_theta >= 360:
-            new_theta = new_theta-360
-        if new_theta <= -360:
-            new_theta = new_theta+360
+        vx=self.wheel_radius/2*(ul+ur)*cos(theta)
+        vy=self.wheel_radius/2*(ul+ur)*sin(theta)
+        vth=self.wheel_radius/self.L*(ur-ul)
+
+        dx=vx*self.move_time
+        dy=vy*self.move_time
+        phi=vth*self.move_time
+
+        new_x=x+dx*math.cos(theta+phi)
+        new_y=y+dy*math.sin(theta+phi)
+
+        new_theta = np.rad2deg(theta+phi)
+        if new_theta >= 360 or new_theta<0:
+            new_theta = new_theta%360
 
         new_point = (new_x,new_y,new_theta)
 
@@ -64,7 +89,7 @@ class Robot:
 
 
     def check_neighbors(self,cur_node):
-        directions = ['left60','left30','straight','right30','right60']
+        directions = ['FastFast','FastSlow','Fast0','SlowFast','SlowSlow','Slow0','0Fast','0Slow']
 
         neighbors = []
         for direction in directions:
