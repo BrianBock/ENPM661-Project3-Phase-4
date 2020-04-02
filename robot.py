@@ -7,11 +7,12 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Ellipse, Circle, Wedge, Polygon, Arrow
 import matplotlib.pyplot as plt
+import bisect
 
 class Robot:
     def __init__(self,maze,userInput):
         self.maze = maze
-        self.pos_thresh = .5
+        self.pos_thresh = 15
         self.ang_thresh = 10
         self.goal_radius = 200
         #Robot params
@@ -26,6 +27,8 @@ class Robot:
         else:
             self.start = (1100,1000,30)
             self.goal = (1200,1000)
+            self.fast = 5
+            self.slow = 1
             # self.d = 10
 
         
@@ -68,13 +71,15 @@ class Robot:
             ur=self.slow
 
 
-        vx=self.wheel_radius/2*(ul+ur)*cos(theta)
-        vy=self.wheel_radius/2*(ul+ur)*sin(theta)
+        vx=self.wheel_radius/2*(ul+ur)*math.cos(theta)
+        vy=self.wheel_radius/2*(ul+ur)*math.sin(theta)
         vth=self.wheel_radius/self.L*(ur-ul)
 
         dx=vx*self.move_time
         dy=vy*self.move_time
         phi=vth*self.move_time
+
+        d=math.sqrt(dx**2+dy**2)
 
         new_x=x+dx*math.cos(theta+phi)
         new_y=y+dy*math.sin(theta+phi)
@@ -85,20 +90,22 @@ class Robot:
 
         new_point = (new_x,new_y,new_theta)
 
-        return new_point
+        return new_point, d
 
 
     def check_neighbors(self,cur_node):
         directions = ['FastFast','FastSlow','Fast0','SlowFast','SlowSlow','Slow0','0Fast','0Slow']
 
         neighbors = []
+        d_list=[]
         for direction in directions:
-            new_point = self.move(cur_node,direction)
+            new_point, d = self.move(cur_node,direction)
             if self.maze.in_bounds(new_point):
                 if not self.maze.in_obstacle(new_point,self.offset):
                     neighbors.append(new_point)
+                    d_list.append(d)
 
-        return neighbors
+        return neighbors, d_list
 
 
     def trunc(self,a,thresh):
@@ -138,7 +145,7 @@ class Robot:
         y=point[1]
         theta=point[2]
 
-        if self.thresh<1:
+        if self.pos_thresh<1:
             x = int(self.trunc(x,self.pos_thresh)*(1/self.pos_thresh))
             y = int(self.trunc(y,self.pos_thresh)*(1/self.pos_thresh))
             # if theta < 0:
@@ -200,25 +207,25 @@ class Robot:
 
             cost2come = self.costs2come[cur_disc[0],cur_disc[1],cur_disc[2]]
 
-            neighbors = self.check_neighbors(cur_node)
+            neighbors, d = self.check_neighbors(cur_node)
 
-            for p in neighbors:
+            for i, p in enumerate(neighbors):
                 cost2goal = math.sqrt((self.goal[0] - p[0])**2 + (self.goal[1] - p[1])**2)
                 print(cost2goal)
                 disc_p = self.discretize(p)
                 if visited_nodes[disc_p[0],disc_p[1],disc_p[2]] == 0: 
                     visited_nodes[disc_p[0],disc_p[1],disc_p[2]] = 1
-                    self.costs2come[disc_p[0],disc_p[1],disc_p[2]] = cost2come+self.d
+                    self.costs2come[disc_p[0],disc_p[1],disc_p[2]] = cost2come+d[i]
                     self.parents[disc_p[0],disc_p[1],disc_p[2]] = parent
                     self.nodes.append(p)
 
-                    cost_fun = cost2come+self.d+cost2goal
+                    cost_fun = cost2come+d[i]+cost2goal
                     sorted_ind = bisect.bisect_right(queue_costs,cost_fun)
                     queue_inds.insert(sorted_ind,(len(self.nodes)-1))
                     queue_costs.insert(sorted_ind,cost_fun)
 
-                elif cost2come + self.d < self.costs2come[disc_p[0],disc_p[1],disc_p[2]]:
-                    self.costs2come[disc_p[0],disc_p[1],disc_p[2]] = cost2come+self.d
+                elif cost2come + d[i] < self.costs2come[disc_p[0],disc_p[1],disc_p[2]]:
+                    self.costs2come[disc_p[0],disc_p[1],disc_p[2]] = cost2come+d[i]
                     self.parents[disc_p[0],disc_p[1],disc_p[2]] = parent
 
                 if cost2goal<self.goal_radius:
