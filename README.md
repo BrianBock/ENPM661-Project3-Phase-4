@@ -2,9 +2,9 @@
 
 ## Introduction
 
-The goal of this project is to find the optimal path through a Cartesian maze with obstacles for a rigid robot using the A* algorithm. The robot for this project is only able to move forward by a set distance, at one of five angles: (-60, -30, 0, 30, 60). The default maze is 300x200 with 6 obstacles - a concave polygon, a circle, an ellipse, a rotated rectangle, and a diamond. 
+The goal of this project is to find the optimal path through a Cartesian maze with obstacles for a rigid robot using the A* algorithm. The robot for this project is only able to move forward by a set distance, at one of five angles: (-60, -30, 0, 30, 60). The default maze is 10200x10200 with 8 obstacles - 4 circles, 3 squares, and a hollow rectangle at the border.
 
-![maze](https://github.com/jaybrecht/ENPM661-Project3/blob/master/Images/maze.png)
+![maze](https://github.com/BrianBock/ENPM661-Project3-Phase3-4/blob/master/Images/maze.png)
 
 The user specifies a start point and goal point in the maze and the program finds the optimal path to the goal.
 
