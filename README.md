@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The goal of this project is to find the optimal path through a Cartesian maze with obstacles for a rigid robot using the A* algorithm. The robot for this project is only able to move forward by a set distance, at one of five angles: (-60, -30, 0, 30, 60). The default maze is 10200x10200 with 8 obstacles - 4 circles, 3 squares, and a hollow rectangle at the border.
+The goal of this project is to find the optimal path through a Cartesian maze with obstacles for a rigid robot using the A* algorithm. The robot for this project is the Turtlebot, a two wheeled differential drive robot. It has 8 possible movements, defined by a combination of 3 speeds for the left and right wheels (user defined Fast, Slow, and 0). The default maze is 10200x10200 with 8 obstacles - 4 circles, 3 squares, and a hollow rectangle at the border.
 
 ![maze](https://github.com/BrianBock/ENPM661-Project3-Phase3-4/blob/master/Images/maze.png)
 
@@ -10,7 +10,7 @@ The user specifies a start point and goal point in the maze and the program find
 
 ## Instructions for Running the Program
 
-To run the program, clone this repository, open a new terminal window and type `python Astar_rigid.py`, if you have additional older versions of python installed you may need to run `python3` instead. The program will prompt you to enter a start point and goal point, the radius of your robot, and the clearance between your robot and the obstacles. If the points are valid and a solution is possible, the program will then show the visualization of the solution. This mode treats your robot as a circle with the given radius and expands all of the obstacles by the radius and clearance.
+To run the program, clone this repository. Open a new terminal window and navigate to the repoistory directory. Type `python Astar_rigid.py`, if you have additional older versions of python installed you may need to run `python3` instead. The program will prompt you to enter a start point and goal point, the radius of your robot, and the clearance between your robot and the obstacles. If the points are valid and a solution is possible, the program will then show the visualization of the solution. This mode treats your robot as a circle with the given radius and expands all of the obstacles by the radius and clearance.
 
 In our tests, the program usually solves the path in less than 3 seconds, but takes up to 35 minutes to export the visualization/video. 
 
