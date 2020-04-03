@@ -20,7 +20,7 @@ class Robot:
         self.radius = 177 # Robot radius
         self.wheel_radius=76
         self.L=230 # Wheel distance #http://robotics.caltech.edu/wiki/images/9/9a/CSME133a_Lab2_Instructions.pdf
-        self.move_time=1
+        self.move_time=.1
 
         if userInput:
             self.get_user_nodes()
@@ -384,7 +384,10 @@ class Robot:
             disc_node = self.discretize(point)
             parent_node = int(self.parents[disc_node[0],disc_node[1],disc_node[2]])
 
-            parent = self.nodes[parent_node]
+            if parent_node == -1:
+                parent = self.start
+            else:
+                parent = self.nodes[parent_node]
 
             arrow = self.plotter(parent,point,color='cyan')
             self.maze.ax.add_artist(arrow)
