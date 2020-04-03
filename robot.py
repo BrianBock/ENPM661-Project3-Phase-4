@@ -378,28 +378,33 @@ class Robot:
         canvas = FigureCanvas(self.maze.fig)
         
         # Show the searched nodes
-        for i,point in enumerate(self.nodes):
-            neighborhood,d_list=self.check_neighbors(point)
-            for neighbor in neighborhood:
-                arrow = self.plotter(point,neighbor,color='cyan')
-                self.maze.ax.add_artist(arrow)
+        for point in self.nodes:
+            # neighborhood,d_list=self.check_neighbors(point)
+            # for neighbor in neighborhood:
+            disc_node = self.discretize(point)
+            parent_node = int(self.parents[disc_node[0],disc_node[1],disc_node[2]])
+
+            parent = self.nodes[parent_node]
+
+            arrow = self.plotter(parent,point,color='cyan')
+            self.maze.ax.add_artist(arrow)
 
 
-                self.maze.fig.canvas.draw()
-                maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
-                maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
+            self.maze.fig.canvas.draw()
+            maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
+            maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
 
-                if output:
-                    out_plt.write(maze_img)             
+            if output:
+                out_plt.write(maze_img)             
 
-                if show:
-                    if cv2.waitKey(1) == ord('q'):
-                        exit()
-                    cv2.imshow('Visualization',maze_img)
+            if show:
+                if cv2.waitKey(1) == ord('q'):
+                    exit()
+                cv2.imshow('Visualization',maze_img)
 
-                arrow.remove()
-                arrow = self.plotter(point,neighbor,color='gray')
-                self.maze.ax.add_artist(arrow)
+            arrow.remove()
+            arrow = self.plotter(parent,point,color='gray')
+            self.maze.ax.add_artist(arrow)
 
         robot_circle=plt.Circle((self.path[0][0],self.path[0][1]), self.offset, color='orange')
         self.maze.ax.add_artist(robot_circle)
