@@ -25,8 +25,8 @@ class Robot:
         if userInput:
             self.get_user_nodes()
         else:
-            self.start = (1100,1000,30)
-            self.goal = (1200,1000)
+            self.start = (1100,1000,90)
+            self.goal = (2000,1000)
             self.fast = 5
             self.slow = 1
             # self.d = 10
@@ -211,7 +211,6 @@ class Robot:
 
             for i, p in enumerate(neighbors):
                 cost2goal = math.sqrt((self.goal[0] - p[0])**2 + (self.goal[1] - p[1])**2)
-                print(cost2goal)
                 disc_p = self.discretize(p)
                 if visited_nodes[disc_p[0],disc_p[1],disc_p[2]] == 0: 
                     visited_nodes[disc_p[0],disc_p[1],disc_p[2]] = 1
@@ -345,13 +344,13 @@ class Robot:
         x_s=start_pos[0]
         y_s=start_pos[1]
         theta=start_pos[2]
-        print("Start")
-        print(x_s, y_s, theta)
+        # print("Start")
+        # print(x_s, y_s, theta)
 
         x_f=end_pos[0]
         y_f=end_pos[1]
-        print("end")
-        print(end_pos)
+        # print("end")
+        # print(end_pos)
 
         dx=x_f-x_s
         dy=y_f-y_s
@@ -368,18 +367,15 @@ class Robot:
             fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
             filename = 'rigid_robot_plot.mp4'
             fps_out = 35
+
+            print('Writing to video. Please Wait.')
             
             if os.path.exists(filename):
                 os.remove(filename)
             
-            out_plt = cv2.VideoWriter(filename, fourcc, fps_out, (1200,800))
-            canvas = FigureCanvas(self.maze.fig)
-
-            print('Writing to video. Please Wait.')
-
-        self.maze.fig.canvas.draw()
-        maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
-        maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
+            out_plt = cv2.VideoWriter(filename, fourcc, fps_out, (800,800))
+        
+        canvas = FigureCanvas(self.maze.fig)
         
         # Show the searched nodes
         for i,point in enumerate(self.nodes):
@@ -389,6 +385,10 @@ class Robot:
                 self.maze.ax.add_artist(arrow)
 
 
+                self.maze.fig.canvas.draw()
+                maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
+                maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
+
                 if output:
                     out_plt.write(maze_img)             
 
@@ -396,12 +396,16 @@ class Robot:
                     if cv2.waitKey(1) == ord('q'):
                         exit()
                     cv2.imshow('Visualization',maze_img)
+
                 arrow.remove()
                 arrow = self.plotter(point,neighbor,color='gray')
                 self.maze.ax.add_artist(arrow)
 
         robot_circle=plt.Circle((self.path[0][0],self.path[0][1]), self.offset, color='orange')
         self.maze.ax.add_artist(robot_circle)
+        self.maze.fig.canvas.draw()
+        maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
+        maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
 
         if output:          
             out_plt.write(maze_img)
@@ -424,19 +428,24 @@ class Robot:
             robot_circle=plt.Circle((self.path[i+1][0],self.path[i+1][1]), self.offset, color='orange')
             self.maze.ax.add_artist(robot_circle)
 
+            self.maze.fig.canvas.draw()
+            maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
+            maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
+
             if output:          
-                self.maze.fig.canvas.draw()
-                maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
-                maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
                 out_plt.write(maze_img)
 
             if show:
                 cv2.imshow('Visualization',maze_img)
                 if cv2.waitKey(1) == ord('q'):
                     exit()
+                if i == len(self.path)-2:
+                    cv2.waitKey(0)
 
         if output:
             out_plt.release()
+
+
             
 
 if __name__ == '__main__':
