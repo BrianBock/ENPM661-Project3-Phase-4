@@ -8,6 +8,21 @@ The goal of this project is to find the optimal path through a Cartesian maze wi
 
 The user specifies a start point and goal point in the maze and the program finds the optimal path to the goal.
 
+## Dependencies 
+
+    cv2
+    numpy
+    matplotlib
+    matplotlib.backends.backend_agg
+    matplotlib.collections
+    matplotlib.patches
+    matplotlib.pyplot
+    datetime
+    bisect
+    math
+    os
+
+
 ## Instructions for Running the Program
 
 To run the program, clone this repository. Open a new terminal window and navigate to the repository directory. Type `python Astar_rigid.py`, if you have additional older versions of python installed you may need to run `python3` instead. 
@@ -82,10 +97,3 @@ Each obstacles can also have a specified color and alpha. To specify these prope
         color: xkcd_color
         alpha: 0-1
 
-## Dependencies 
-
-    cv2
-    numpy
-    matplotlib
-    datetime
-    
