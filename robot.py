@@ -11,18 +11,23 @@ import bisect
 
 class Robot:
     def __init__(self,maze,userInput):
+        # Maze/Solver Params
         self.maze = maze
         self.pos_thresh = 15
         self.ang_thresh = 10
         self.goal_radius = 200
+
         #Robot params
         self.clearance = 15
         self.radius = 177 # Robot radius
         self.wheel_radius=76
         self.L=230 # Wheel distance #http://robotics.caltech.edu/wiki/images/9/9a/CSME133a_Lab2_Instructions.pdf
-        self.move_time=1
         self.offset=self.clearance+self.radius
+        self.min_speed=1
         self.max_speed=10
+        
+        self.min_time=.1
+        self.max_time=10
 
         self.maze.generate_constraints(self.offset)
 
@@ -34,9 +39,10 @@ class Robot:
             # self.goal = (2000,1000)
             #Hard
             self.start = (1100,1000,90)
-            self.goal = (3000,6120)
+            self.goal = (5000,8160)
             self.fast = 8
             self.slow = 1
+            self.move_time=1
             # self.d = 10
 
         
@@ -360,10 +366,10 @@ class Robot:
             speed1_str = input('Speed 1 (rad/s): ')
             try:
                 speed1 = float(speed1_str)
-                if 0 <= speed1 <= self.max_speed:
+                if self.min_speed <= speed1 <= self.max_speed:
                     validSpeed1 = True
                 else:
-                    print('The value must be between 0 and '+str(self.max_speed))
+                    print('The value must be between '+str(self.min_speed)' and '+str(self.max_speed))
             except ValueError:
                 print('Wheel speed must be a number. Please try again')
 
@@ -373,14 +379,27 @@ class Robot:
             speed2_str = input('Speed 2 (rad/s): ')
             try:
                 speed2 = float(speed2_str)
-                if (0 <= speed2 <= self.max_speed) and speed2 is not speed1:
+                if (self.min_speed <= speed2 <= self.max_speed) and speed2 is not speed1:
                     validSpeed2 = True
-                elif (0 <= speed2 <= self.max_speed) and speed2 is speed1:
+                elif (self.min_speed <= speed2 <= self.max_speed) and speed2 is speed1:
                     print('Speed 2 cannot be the same as speed 1.')
                 else:
-                    print('The value must be between 0 and '+str(self.max_speed))
+                    print('The value must be between '+str(self.min_speed)' and '+str(self.max_speed))
             except ValueError:
                 print('Wheel speed must be a number. Please try again')
+
+        validTime = False
+        while not validTime:
+            print('Please enter the run time - this is how long the wheels will spin for each movement.')
+            time_str = input('Run time (s): ')
+            try:
+                self.move_time = float(time_str)
+                if (self.min_time <= self.move_time <= self.max_time):
+                    validTime = True
+                else:
+                    print('The value must be between '+str(self.min_time)' and '+str(self.max_time))
+            except ValueError:
+                print('Run time must be a number. Please try again')
 
         self.fast=max(speed1,speed2)
         self.slow=min(speed1,speed2)
