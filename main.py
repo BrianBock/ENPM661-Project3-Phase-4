@@ -12,9 +12,11 @@ userInput = False
 
 # Construct maze object
 maze = Maze('maze.txt')
+print("Maze created")
 
 # Contstruct the robot
 robot = Robot(maze,userInput)
+print("Robot created. Attempting to solve.")
 
 # Record the start time so we can compute run time at the end
 starttime = dtime.now()
@@ -25,11 +27,13 @@ robot.A_star()
 if robot.foundGoal:
     searchtime=dtime.now()
     searchtime=searchtime-starttime
-    robot.generate_path()
     print('Found Path in '+str(searchtime)+' (hours:min:sec)')
+    print('Generating path')
+    robot.generate_path()
+    print('Path generated')
 
 else:
-    print('The goal could not be found')
+    print('Unable to find path between start and goal')
     exit()
 
 # Visualize the path
