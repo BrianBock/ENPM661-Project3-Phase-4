@@ -7,7 +7,7 @@ from maze import Maze
 from robot import Robot
 
 write_to_video = True
-show_visualization = True
+show_visualization = False
 userInput = False
 
 # Construct maze object
@@ -27,13 +27,13 @@ robot.A_star()
 if robot.foundGoal:
     searchtime=dtime.now()
     searchtime=searchtime-starttime
-    print('Found Path in '+str(searchtime)+' (hours:min:sec)')
+    print('Found solution in '+str(searchtime)+' (hours:min:sec)')
     print('Generating path')
     robot.generate_path()
     print('Path generated')
 
 else:
-    print('Unable to find path between start and goal')
+    print('Unable to find path between start and goal.')
     exit()
 
 # Visualize the path
