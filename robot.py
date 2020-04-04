@@ -20,7 +20,7 @@ class Robot:
         self.radius = 177 # Robot radius
         self.wheel_radius=76
         self.L=230 # Wheel distance #http://robotics.caltech.edu/wiki/images/9/9a/CSME133a_Lab2_Instructions.pdf
-        self.move_time=.1
+        self.move_time=1
         self.offset=self.clearance+self.radius
         self.max_speed=10
 
@@ -29,9 +29,13 @@ class Robot:
         if userInput:
             self.get_user_nodes()
         else:
+            #Easy
+            # self.start = (1100,1000,90)
+            # self.goal = (2000,1000)
+            #Hard
             self.start = (1100,1000,90)
-            self.goal = (2000,1000)
-            self.fast = 5
+            self.goal = (3000,6120)
+            self.fast = 8
             self.slow = 1
             # self.d = 10
 
@@ -412,10 +416,11 @@ class Robot:
 
 
     def visualize(self,output,show):
+        frame_interval=50
         if output:
             fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
             filename = 'rigid_robot_plot.mp4'
-            fps_out = 35
+            fps_out = 100
 
             print('Writing to video. Please Wait.')
             
@@ -426,6 +431,7 @@ class Robot:
         
         canvas = FigureCanvas(self.maze.fig)
         
+        count=0
         # Show the searched nodes
         for point in self.nodes:
             # neighborhood,d_list=self.check_neighbors(point)
@@ -493,18 +499,21 @@ class Robot:
                 out_plt.write(maze_img)
 
             if show:
-                cv2.imshow('Visualization',maze_img)
-                if cv2.waitKey(1) == ord('q'):
-                    exit()
-                if i == len(self.path)-2:
-                    cv2.waitKey(0)
+                if count>=frame_interval: #Only show every frame_intrval'th frame
+                    cv2.imshow('Visualization',maze_img)
+                    if cv2.waitKey(1) == ord('q'):
+                        exit()
+                    if i == len(self.path)-2:
+                        cv2.waitKey(0)
+                    frame_interval=0
 
         if output:
             out_plt.release()
 
+        count+=1
 
             
 
 if __name__ == '__main__':
     
-    print("trunc(5,1)")
+    print("You should't run this program by itself. Please run main.py instead.")
