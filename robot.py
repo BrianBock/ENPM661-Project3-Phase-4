@@ -21,6 +21,10 @@ class Robot:
         self.wheel_radius=76
         self.L=230 # Wheel distance #http://robotics.caltech.edu/wiki/images/9/9a/CSME133a_Lab2_Instructions.pdf
         self.move_time=.1
+        self.offset=self.clearance+self.radius
+        self.max_speed=10
+
+        self.maze.generate_constraints(self.offset)
 
         if userInput:
             self.get_user_nodes()
@@ -32,7 +36,7 @@ class Robot:
             # self.d = 10
 
         
-        self.offset=self.clearance+self.radius
+        
 
         s_circle = Circle((self.start[0],self.start[1]), self.goal_radius, color='green',alpha=.4)
         self.maze.ax.add_patch(s_circle)
@@ -163,7 +167,6 @@ class Robot:
 
 
     def A_star(self):
-        self.maze.generate_constraints(self.offset)
 
         # each node = (x,y,theta) <- floats
         # nodes = [node1,node2,..,node_n]
@@ -252,20 +255,65 @@ class Robot:
                 self.path.insert(0,self.nodes[ind])
 
 
+    def switchCoords2Cartesian(self,coordSystem, point):
+        x=point[0]
+        y=point[1]
+        if len(point)==3:
+            theta=point[2]
+
+        if coordSystem == "Image":
+            new_x=x
+            new_y=self.maze.height-y
+            
+
+        elif coordSystem == "Cartesian":
+            new_x=x
+            new_y=y
+
+        elif coordSystem == "Gazebo":
+            new_x=self.maze.width/2-x
+            new_y=self.maze.height/2-y
+            new_point=(new_x,new_y,theta)
+        
+        if len(point)==3:
+            new_point=(new_x,new_y,theta)
+        else:
+            new_point=(new_x,new_y)
+        print(new_point)
+        return new_point
+        
+
     def get_user_nodes(self):
+        needCoordinates=True
+        while needCoordinates:
+            print('You have 3 options for coordinate systems. Image coordinates have the origin at the top left, with positive y in the downward direction, and positive x in the rightward direction. Cartesian coordinates have the origin in the bottom left, with positive y in the upward direction, and positive x in the rightward direction. Gazebo coordinates have the origin at the center, with positive y in the upward direction, and positive x in the rightward direction. Regardless of your coordinate system choice, the output visualizaion will be shown in Cartesian coordinates.')
+            coords=input('Please enter either "image", "cartesian", or "gazebo": ')
+            if coords.lower() == 'image' or coords.lower() == 'i':
+                needCoordinates=False
+                coordSystem="Image"
+            elif coords.lower() == 'cartesian' or coords.lower() == 'cart' or coords.lower() == 'c':
+                needCoordinates=False
+                coordSystem="Cartesian"
+            elif coords.lower() == 'gazebo' or coords.lower() == 'g':
+                needCoordinates=False
+                coordSystem="Gazebo"
+            else:
+                print("I don't understand what you entered. Please try again.")
+
         valid_input = False
         while not valid_input:
             valid_pt = False
             while not valid_pt:
                 print('Please enter a start point (x,y,theta)')
-                start_str_x = input('start x: ')
-                start_str_y = input('start y: ')
-                start_str_th = input('start theta: ')
+                start_str_x = input('start x (mm): ')
+                start_str_y = input('start y (mm): ')
+                start_str_th = input('start theta (deg): ')
                 try:
                     start_point = (float(start_str_x),float(start_str_y),int(start_str_th))
                 except ValueError:
-                    print('Please enter a number')
+                    print('The start position coordinates must be numbers. Please try again')
                 else:
+                    start_point=self.switchCoords2Cartesian(coordSystem,start_point)
                     # Check if start point is valid in maze 
                     if self.maze.in_bounds(start_point):
                         if self.maze.in_obstacle(start_point,0):
@@ -278,13 +326,14 @@ class Robot:
             valid_pt = False
             while not valid_pt:
                 print('Please enter a goal point (x,y)')
-                goal_str_x = input('goal x: ')
-                goal_str_y = input('goal y: ')
+                goal_str_x = input('goal x (mm): ')
+                goal_str_y = input('goal y (mm): ')
                 try:
                     goal_point = (float(goal_str_x),float(goal_str_y))
                 except ValueError:
-                    print('Please enter a number')
+                    print('The goal position coordinates must be numbers. Please try again')
                 else:
+                    goal_point=self.switchCoords2Cartesian(coordSystem,goal_point)
                     # Check if goal point is valid in maze 
                     if self.maze.in_bounds(goal_point):
                         if self.maze.in_obstacle(goal_point,0):
@@ -301,43 +350,43 @@ class Robot:
             else:
                 valid_input = True
 
-        valid_d = False
-        while not valid_d:
-            print('Please enter the distance your robot can travel per move')
-            d_str = input('distance: ')
+        validSpeed1 = False
+        while not validSpeed1:
+            print('Please enter the first speed that your robot wheels can move at')
+            speed1_str = input('Speed 1 (rad/s): ')
             try:
-                d = float(d_str)
-                if 1 <= d <= 10:
-                    valid_d = True
+                speed1 = float(speed1_str)
+                if 0 <= speed1 <= self.max_speed:
+                    validSpeed1 = True
                 else:
-                    print('The value must be between 1 and 10')
+                    print('The value must be between 0 and '+str(self.max_speed))
             except ValueError:
-                print('Please enter a number')
+                print('Wheel speed must be a number. Please try again')
 
-
-        valid_clear = False
-        while not valid_clear:
-            print('Please enter the desired clearance to obstacles')
-            clearance_str = input('clearance: ')
+        validSpeed2 = False
+        while not validSpeed2:
+            print('Please enter the second speed that your robot wheels can move at')
+            speed2_str = input('Speed 2 (rad/s): ')
             try:
-                self.clearance = float(clearance_str)
-                valid_clear = True
+                speed2 = float(speed2_str)
+                if (0 <= speed2 <= self.max_speed) and speed2 is not speed1:
+                    validSpeed2 = True
+                elif (0 <= speed2 <= self.max_speed) and speed2 is speed1:
+                    print('Speed 2 cannot be the same as speed 1.')
+                else:
+                    print('The value must be between 0 and '+str(self.max_speed))
             except ValueError:
-                print('Please enter a number')
+                print('Wheel speed must be a number. Please try again')
 
-        valid_radius = False
-        while not valid_radius:
-            print('Please enter the radius of your robot')
-            radius_str = input('radius: ')
-            try:
-                self.radius = float(radius_str)
-                valid_radius = True
-            except ValueError:
-                print('Please enter a number')
+        self.fast=max(speed1,speed2)
+        self.slow=min(speed1,speed2)
+
+        print("Fast speed will be: "+str(self.fast))
+        print("Slow speed will be: "+str(self.slow))
 
         self.start = start_point
         self.goal = goal_point
-        self.d = d
+        # self.d = d
 
 
     def plotter(self,start_pos, end_pos,color="black"):
