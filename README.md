@@ -10,7 +10,7 @@ The user specifies a start point and goal point in the maze and the program find
 
 ## Instructions for Running the Program
 
-To run the program, clone this repository. Open a new terminal window and navigate to the repoistory directory. Type `python Astar_rigid.py`, if you have additional older versions of python installed you may need to run `python3` instead. The program will prompt you to enter a start point and goal point, the radius of your robot, and the clearance between your robot and the obstacles. If the points are valid and a solution is possible, the program will then show the visualization of the solution. This mode treats your robot as a circle with the given radius and expands all of the obstacles by the radius and clearance.
+To run the program, clone this repository. Open a new terminal window and navigate to the repository directory. Type `python Astar_rigid.py`, if you have additional older versions of python installed you may need to run `python3` instead. The program will prompt you to enter a start point and goal point, the radius of your robot, and the clearance between your robot and the obstacles. If the points are valid and a solution is possible, the program will then show the visualization of the solution. This mode treats your robot as a circle with the given radius and expands all of the obstacles by the radius and clearance.
 
 In our tests, the program usually solves the path in less than 3 seconds, but takes up to 35 minutes to export the visualization/video. 
 
