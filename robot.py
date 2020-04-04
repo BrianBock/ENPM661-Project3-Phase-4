@@ -279,9 +279,9 @@ class Robot:
             new_point=(new_x,new_y,theta)
         else:
             new_point=(new_x,new_y)
-        print(new_point)
+
         return new_point
-        
+
 
     def get_user_nodes(self):
         needCoordinates=True
