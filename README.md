@@ -25,22 +25,39 @@ The user specifies a start point and goal point in the maze and the program find
 
 ## Instructions for Running the Program
 
-To run the program, clone this repository. Open a new terminal window and navigate to the repository directory. Type `python Astar_rigid.py`, if you have additional older versions of python installed you may need to run `python3` instead. 
+To run the program, clone this repository to a directory you have write access to. Open a new terminal window and navigate to the repository directory. Type `python main.py`, if you have additional older versions of python installed you may need to run `python3` instead. 
 
 The program will prompt you for a coordinate system. You have 3 choices - image coordinates have the origin at the top left, with positive y in the downward direction, and positive x in the rightward direction. Cartesian coordinates have the origin in the bottom left, with positive y in the upward direction, and positive x in the rightward direction. Gazebo coordinates have the origin at the center, with positive y in the upward direction, and positive x in the rightward direction. Regardless of your coordinate system choice, the output visualizaion will be shown in Cartesian coordinates. 
 
 Once you have selected a coordinate system, you'll be prompted to enter a start point, goal point, and the fast and slow speeds for the robot's wheels. If the points are valid and a solution is possible, the program will solve then show the visualization of the solution. This mode treats your robot as a circle with the given radius and expands all of the obstacles by the radius and clearance.
 
-In our tests, the program usually solves the path in less than 3 seconds, but takes up to 35 minutes to export the visualization/video. 
+In our tests, the program usually solves the path 5-35 minutes (depending on all the run parameters, worst case - 6 hours, 51 min), but can take much longer to export the visualization/video. 
+
+
+## Pre-Computed Solves
+When the program finishes solving the path, it saves all of the relevant solution information to a file in the `Solve Files` directory. The file name for each solution file details that run's parameters. For example: `path_file-s(1100, 1000, 90)-g(9000, 9000)-8,1-t1.npz`
+Start: (1100, 1000, 90)
+Goal: (9000, 9000)
+Fast Speed: 8
+Slow Speed: 1
+Move Time: 1
+
+We ran several different goal configurations and saved them to these files. This allows the solution to be computed independent of visualization. Some of these solutions took several hours to compute. The simplest visualization (just the final path and robot) is significantly faster than full visualization (every node checked), but still takes several minutes (as much as a half hour, in one configuration). With the solution saved, we can run either visualization at a later time. 
+
+To make use of one of these pre-solved solutions, please follow the following steps:
+1. Use the file name of the solution to get the run parameters (as shown above)
+2. Enter those parameters in the Init section of `robot.py`. The numbers must exactly match.
+3. In the top of `main.py`, toggle `trySolve` to False. 
+4. Run `main.py`. 
 
 
 ## Output
 
-The program has two toggles at the top of the of the `Astar_rigid.py` file. If `write_to_video` is set to `True`, the program will output a video of the solution, including all searched nodes. If `show_visualization` is set to `True`, the program will show the visualization as it is being created. 
+The program has several boolean toggles at the top of the of the `main.py` file. If `write_to_video` is set to `True`, the program will output a video of the solution. This is often a time consuming step. By default, the program will only export an animation of the final path, which runs much faster. If you would like to see the full visualization including all searched nodes, toggle `show_solve` to `True`. As a warning, this step can take considerable time, often several hours. To speed this up, we only save every `k` frames, a number which can be changed by editing `solve_frame_interval` in the visualization section of `robot.py`. Lower intervals will be much slower to export. If `show_visualization` is set to `True`, the program will show the visualization as it is being created. 
 
-The visualization first shows all of the searched nodes. For each node in the list of searched nodes any of the viable neighbors of that node are plotted as arrows. The current arrow is show in cyan. After a searched node is within the goal, the program uses backtracking to find the optimal course which is plotted with red arrows. 
+If `show_solve` is set to `True`, the visualization first shows all of the searched nodes. For each node in the list of searched nodes any of the viable neighbors of that node are plotted as arrows. The current arrow is show in cyan. After a searched node is within the goal, the program uses backtracking to find the optimal course which is plotted with red arrows. 
 
-![visualization](https://github.com/jaybrecht/ENPM661-Project3/blob/master/Images/visualization.gif)
+![visualization](https://github.com/BrianBock/ENPM661-Project3-Phase3-4/blob/master/Images/visualization_path-only.gif)
 
 
 ## Creating New Mazes

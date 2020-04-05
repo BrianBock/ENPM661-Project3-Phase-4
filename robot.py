@@ -39,14 +39,14 @@ class Robot:
             # self.goal = (2000,1000)
             #Hard
             self.start = (1100,1000,90)
-            self.goal = (8160,4080)
+            self.goal = (9000,9000)
             self.fast = 8
             self.slow = 1
             self.move_time=1
             # self.d = 10
         
         self.run_params="-s"+str(self.start)+"-g"+str(self.goal)+"-"+str(self.fast)+","+str(self.slow)+"-t"+str(self.move_time)
-        self.path_file="path_file"+self.run_params+".npz"
+        self.path_file="Solve Files/path_file"+self.run_params+".npz"
         
         
 
@@ -441,11 +441,10 @@ class Robot:
         
 
 
-    def visualize(self,output,show):
+    def visualize(self,output,show,showSolve):
         load_from_file=True
-        showSolve=False
         solve_frame_interval=100
-        path_frame_interval=3
+        path_frame_interval=1
 
         if load_from_file and os.path.exists(self.path_file):
             with np.load(self.path_file) as data:
