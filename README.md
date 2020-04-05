@@ -35,11 +35,18 @@ In our tests, the program usually solves the path 5-35 minutes (depending on all
 
 
 ## Pre-Computed Solves
-When the program finishes solving the path, it saves all of the relevant solution information to a file in the `Solve Files` directory. The file name for each solution file details that run's parameters. For example: `path_file-s(1100, 1000, 90)-g(9000, 9000)-8,1-t1.npz`
+When the program finishes solving the path, it saves all of the relevant solution information to a file in the `Solve Files` directory. The file name for each solution file details that run's parameters. For example: 
+
+`path_file-s(1100, 1000, 90)-g(9000, 9000)-8,1-t1.npz`
+
 Start: (1100, 1000, 90)
+
 Goal: (9000, 9000)
+
 Fast Speed: 8
+
 Slow Speed: 1
+
 Move Time: 1
 
 We ran several different goal configurations and saved them to these files. This allows the solution to be computed independent of visualization. Some of these solutions took several hours to compute. The simplest visualization (just the final path and robot) is significantly faster than full visualization (every node checked), but still takes several minutes (as much as a half hour, in one configuration). With the solution saved, we can run either visualization at a later time. 
