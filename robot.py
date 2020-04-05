@@ -475,7 +475,7 @@ class Robot:
             count=0
             # Show the searched nodes
             for point in self.nodes:
-                print(count)
+                # print(count)
                 # neighborhood,d_list=self.check_neighbors(point)
                 # for neighbor in neighborhood:
                 disc_node = self.discretize(point)
@@ -501,6 +501,8 @@ class Robot:
                     if cv2.waitKey(1) == ord('q'):
                         exit()
                     cv2.imshow('Visualization',maze_img)
+                    
+                if output or show and count>=solve_frame_interval:
                     count=0
 
                 arrow.remove()
