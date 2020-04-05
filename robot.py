@@ -31,8 +31,6 @@ class Robot:
 
         self.maze.generate_constraints(self.offset)
 
-        self.path_file="path_file.npz"
-
         if userInput:
             self.get_user_nodes()
         else:
@@ -41,12 +39,14 @@ class Robot:
             # self.goal = (2000,1000)
             #Hard
             self.start = (1100,1000,90)
-            self.goal = (5000,8160)
+            self.goal = (8160,4080)
             self.fast = 8
             self.slow = 1
             self.move_time=1
             # self.d = 10
-
+        
+        self.run_params="-s"+str(self.start)+"-g"+str(self.goal)+"-"+str(self.fast)+","+str(self.slow)+"-t"+str(self.move_time)
+        self.path_file="path_file"+self.run_params+".npz"
         
         
 
@@ -444,6 +444,8 @@ class Robot:
     def visualize(self,output,show):
         load_from_file=True
         showSolve=False
+        solve_frame_interval=100
+        path_frame_interval=3
 
         if load_from_file and os.path.exists(self.path_file):
             with np.load(self.path_file) as data:
@@ -454,10 +456,10 @@ class Robot:
 
 
 
-        frame_interval=3
+        
         if output:
             fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-            filename = 'rigid_robot_plot.mp4'
+            filename = self.run_params+'.mp4'
             fps_out = 50
 
             print('Writing to video. Please Wait.')
@@ -493,13 +495,14 @@ class Robot:
                 maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
                 maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
 
-                if output and count>=frame_interval:
+                if output and count>=solve_frame_interval:
                     out_plt.write(maze_img)             
 
-                if show and count>=frame_interval:
+                if show and count>=solve_frame_interval:
                     if cv2.waitKey(1) == ord('q'):
                         exit()
                     cv2.imshow('Visualization',maze_img)
+                    count=0
 
                 arrow.remove()
                 arrow = self.plotter(parent,point,color='gray')
@@ -538,17 +541,17 @@ class Robot:
             maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
             maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
 
-            if output and count>=frame_interval:          
+            if output and count>=path_frame_interval:          
                 out_plt.write(maze_img)
 
-            if show and count>=frame_interval:
+            if show and count>=path_frame_interval:
                 #Only show every frame_intrval'th frame
                 cv2.imshow('Visualization',maze_img)
                 if cv2.waitKey(1) == ord('q'):
                     exit()
                 if i == len(self.path)-2:
                     cv2.waitKey(0)
-                frame_interval=0
+                path_frame_interval=0
 
             count+=1
 
