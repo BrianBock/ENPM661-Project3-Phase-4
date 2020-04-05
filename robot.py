@@ -31,6 +31,8 @@ class Robot:
 
         self.maze.generate_constraints(self.offset)
 
+        self.path_file="path_file.npz"
+
         if userInput:
             self.get_user_nodes()
         else:
@@ -265,6 +267,11 @@ class Robot:
                 self.path.insert(0,self.nodes[ind])
 
 
+        # Save self.path to a npz file
+        np.savez(self.path_file,path=self.path, parents=self.parents, nodes=self.nodes)
+        print("Solution saved to "+str(self.path_file))
+
+
     def switchCoords2Cartesian(self,coordSystem, point):
         x=point[0]
         y=point[1]
@@ -369,7 +376,7 @@ class Robot:
                 if self.min_speed <= speed1 <= self.max_speed:
                     validSpeed1 = True
                 else:
-                    print('The value must be between '+str(self.min_speed)' and '+str(self.max_speed))
+                    print('The value must be between '+str(self.min_speed)+' and '+str(self.max_speed))
             except ValueError:
                 print('Wheel speed must be a number. Please try again')
 
@@ -384,7 +391,7 @@ class Robot:
                 elif (self.min_speed <= speed2 <= self.max_speed) and speed2 is speed1:
                     print('Speed 2 cannot be the same as speed 1.')
                 else:
-                    print('The value must be between '+str(self.min_speed)' and '+str(self.max_speed))
+                    print('The value must be between '+str(self.min_speed)+' and +'+str(self.max_speed))
             except ValueError:
                 print('Wheel speed must be a number. Please try again')
 
@@ -397,7 +404,7 @@ class Robot:
                 if (self.min_time <= self.move_time <= self.max_time):
                     validTime = True
                 else:
-                    print('The value must be between '+str(self.min_time)' and '+str(self.max_time))
+                    print('The value must be between '+str(self.min_time)+' and '+str(self.max_time))
             except ValueError:
                 print('Run time must be a number. Please try again')
 
@@ -435,11 +442,23 @@ class Robot:
 
 
     def visualize(self,output,show):
-        frame_interval=50
+        load_from_file=True
+        showSolve=False
+
+        if load_from_file and os.path.exists(self.path_file):
+            with np.load(self.path_file) as data:
+                self.nodes = data['nodes']
+                self.path = data['path']
+                self.parents = data['parents']
+        
+
+
+
+        frame_interval=3
         if output:
             fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
             filename = 'rigid_robot_plot.mp4'
-            fps_out = 100
+            fps_out = 50
 
             print('Writing to video. Please Wait.')
             
@@ -450,38 +469,42 @@ class Robot:
         
         canvas = FigureCanvas(self.maze.fig)
         
-        count=0
-        # Show the searched nodes
-        for point in self.nodes:
-            # neighborhood,d_list=self.check_neighbors(point)
-            # for neighbor in neighborhood:
-            disc_node = self.discretize(point)
-            parent_node = int(self.parents[disc_node[0],disc_node[1],disc_node[2]])
+        
+        if showSolve:
+            count=0
+            # Show the searched nodes
+            for point in self.nodes:
+                print(count)
+                # neighborhood,d_list=self.check_neighbors(point)
+                # for neighbor in neighborhood:
+                disc_node = self.discretize(point)
+                parent_node = int(self.parents[disc_node[0],disc_node[1],disc_node[2]])
 
-            if parent_node == -1:
-                parent = self.start
-            else:
-                parent = self.nodes[parent_node]
+                if parent_node == -1:
+                    parent = self.start
+                else:
+                    parent = self.nodes[parent_node]
 
-            arrow = self.plotter(parent,point,color='cyan')
-            self.maze.ax.add_artist(arrow)
+                arrow = self.plotter(parent,point,color='cyan')
+                self.maze.ax.add_artist(arrow)
 
 
-            self.maze.fig.canvas.draw()
-            maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
-            maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
+                self.maze.fig.canvas.draw()
+                maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
+                maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
 
-            if output:
-                out_plt.write(maze_img)             
+                if output and count>=frame_interval:
+                    out_plt.write(maze_img)             
 
-            if show:
-                if cv2.waitKey(1) == ord('q'):
-                    exit()
-                cv2.imshow('Visualization',maze_img)
+                if show and count>=frame_interval:
+                    if cv2.waitKey(1) == ord('q'):
+                        exit()
+                    cv2.imshow('Visualization',maze_img)
 
-            arrow.remove()
-            arrow = self.plotter(parent,point,color='gray')
-            self.maze.ax.add_artist(arrow)
+                arrow.remove()
+                arrow = self.plotter(parent,point,color='gray')
+                self.maze.ax.add_artist(arrow)
+                count+=1
 
         robot_circle=plt.Circle((self.path[0][0],self.path[0][1]), self.offset, color='orange')
         self.maze.ax.add_artist(robot_circle)
@@ -498,6 +521,7 @@ class Robot:
                 exit()
 
         # Draw the path
+        count=0
         for i in range(len(self.path)-1):
             #Remove the previous circle
             robot_circle.remove()
@@ -514,22 +538,24 @@ class Robot:
             maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
             maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
 
-            if output:          
+            if output and count>=frame_interval:          
                 out_plt.write(maze_img)
 
-            if show:
-                if count>=frame_interval: #Only show every frame_intrval'th frame
-                    cv2.imshow('Visualization',maze_img)
-                    if cv2.waitKey(1) == ord('q'):
-                        exit()
-                    if i == len(self.path)-2:
-                        cv2.waitKey(0)
-                    frame_interval=0
+            if show and count>=frame_interval:
+                #Only show every frame_intrval'th frame
+                cv2.imshow('Visualization',maze_img)
+                if cv2.waitKey(1) == ord('q'):
+                    exit()
+                if i == len(self.path)-2:
+                    cv2.waitKey(0)
+                frame_interval=0
+
+            count+=1
 
         if output:
             out_plt.release()
 
-        count+=1
+        
 
             
 
