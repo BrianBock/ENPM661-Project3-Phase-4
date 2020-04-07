@@ -443,7 +443,7 @@ class Robot:
 
     def visualize(self,output,show,showSolve):
         load_from_file=True
-        solve_frame_interval=100
+        solve_frame_interval=200
         path_frame_interval=1
 
         if load_from_file and os.path.exists(self.path_file):
@@ -459,6 +459,8 @@ class Robot:
         if output:
             fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
             filename = self.run_params+'.mp4'
+            # fourcc = cv2.VideoWriter_fourcc(*'XVID')
+            # filename = self.run_params+'.avi'
             fps_out = 50
 
             print('Writing to video. Please Wait.')
