@@ -38,8 +38,8 @@ class Robot:
             # self.start = (1100,1000,90)
             # self.goal = (2000,1000)
             #Hard
-            self.start = (1100,1000,90)
-            self.goal = (9000,9000)
+            self.start = (895,1600,90)
+            self.goal = (5000,1600)
             self.fast = 8
             self.slow = 1
             self.move_time=1
@@ -491,20 +491,19 @@ class Robot:
                 arrow = self.plotter(parent,point,color='cyan')
                 self.maze.ax.add_artist(arrow)
 
+                if count>=solve_frame_interval:
+                    self.maze.fig.canvas.draw()
+                    maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
+                    maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
 
-                self.maze.fig.canvas.draw()
-                maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
-                maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
+                    if output:
+                        out_plt.write(maze_img)             
 
-                if output and count>=solve_frame_interval:
-                    out_plt.write(maze_img)             
-
-                if show and count>=solve_frame_interval:
-                    if cv2.waitKey(1) == ord('q'):
-                        exit()
-                    cv2.imshow('Visualization',maze_img)
-                    
-                if output or show and count>=solve_frame_interval:
+                    if show:
+                        if cv2.waitKey(1) == ord('q'):
+                            exit()
+                        cv2.imshow('Visualization',maze_img)    
+                
                     count=0
 
                 arrow.remove()
@@ -540,22 +539,23 @@ class Robot:
             robot_circle=plt.Circle((self.path[i+1][0],self.path[i+1][1]), self.offset, color='orange')
             self.maze.ax.add_artist(robot_circle)
 
-            self.maze.fig.canvas.draw()
-            maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
-            maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
+            if count>=path_frame_interval:
+                self.maze.fig.canvas.draw()
+                maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
+                maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
 
-            if output and count>=path_frame_interval:          
-                out_plt.write(maze_img)
+                if output:          
+                    out_plt.write(maze_img)
 
-            if show and count>=path_frame_interval:
-                #Only show every frame_intrval'th frame
-                cv2.imshow('Visualization',maze_img)
-                if cv2.waitKey(1) == ord('q'):
-                    exit()
-                if i == len(self.path)-2:
-                    cv2.waitKey(0)
-                path_frame_interval=0
+                if show:
+                    cv2.imshow('Visualization',maze_img)
+                    if cv2.waitKey(1) == ord('q'):
+                        exit()
+                    if i == len(self.path)-2:
+                        cv2.waitKey(0)
+                    path_frame_interval=0
 
+                count=0
             count+=1
 
         if output:
