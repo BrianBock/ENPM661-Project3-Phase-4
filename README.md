@@ -23,9 +23,9 @@ The user specifies a start point and goal point in the maze and the program find
     os
 
 
-## Instructions for Running the Program
+## Instructions for Running the Program - Phase 3
 
-To run the program, clone this repository to a directory you have write access to. Open a new terminal window and navigate to the repository directory. Type `python main.py`, if you have additional older versions of python installed you may need to run `python3` instead. 
+To run the program, clone this repository to a directory you have write access to. Open a new terminal window and navigate to the Phase 3 directory. Type `python main.py`, if you have additional older versions of python installed you may need to run `python3` instead. 
 
 The program will prompt you for a coordinate system. You have 3 choices - image coordinates have the origin at the top left, with positive y in the downward direction, and positive x in the rightward direction. Cartesian coordinates have the origin in the bottom left, with positive y in the upward direction, and positive x in the rightward direction. Gazebo coordinates have the origin at the center, with positive y in the upward direction, and positive x in the rightward direction. Regardless of your coordinate system choice, the output visualizaion will be shown in Cartesian coordinates. 
 
@@ -35,7 +35,7 @@ In our tests, the program usually solves the path 5-35 minutes (depending on all
 
 
 ## Pre-Computed Solves
-When the program finishes solving the path, it saves all of the relevant solution information to a file in the `Solve Files` directory. The file name for each solution file details that run's parameters. For example: 
+When the program finishes solving the path, it saves all of the relevant solution information to a file in the `Solve Files` directory (which is why you must have write privileges to the directory you save this repo to). The file name for each solution file details that run's parameters. For example: 
 
 `path_file-s(1100, 1000, 90)-g(9000, 9000)-8,1-t1.npz`
 
@@ -76,6 +76,10 @@ Start(1100,1000,90), Goal(8160, 4080) - https://youtu.be/mdABzRMgJLM
 Start(1100,1000,90), Goal(9000,9000) - https://youtu.be/rJ3gQGppOLo
 
 Start(1100,1000,90), Goal(5000,8160) - https://youtu.be/Q-o_nECJxok
+
+## Github
+
+You can view all of the code related to this project on our Github: https://github.com/BrianBock/ENPM661-Project3-Phase3-4
 
 
 ## Creating New Mazes
