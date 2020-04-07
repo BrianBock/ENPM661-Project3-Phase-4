@@ -458,7 +458,7 @@ class Robot:
         
         if output:
             fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-            filename = self.run_params+'.mp4'
+            filename = 'Simulation Videos/'+self.run_params+'.mp4'
             # fourcc = cv2.VideoWriter_fourcc(*'XVID')
             # filename = self.run_params+'.avi'
             fps_out = 50
