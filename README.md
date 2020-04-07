@@ -70,8 +70,11 @@ If `show_solve` is set to `True`, the visualization first shows all of the searc
 ## Videos
 
 Start(1100,1000,90), Goal(7000, 6120) - https://youtu.be/C3S3WZDgzS4
+
 Start(1100,1000,90), Goal(8160, 4080) - https://youtu.be/mdABzRMgJLM
+
 Start(1100,1000,90), Goal(9000,9000) - https://youtu.be/rJ3gQGppOLo
+
 Start(1100,1000,90), Goal(5000,8160) - https://youtu.be/Q-o_nECJxok
 
 
