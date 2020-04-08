@@ -2,11 +2,14 @@
 
 ## Introduction
 
-The goal of this project is to find the optimal path through a Cartesian maze with obstacles for a rigid robot using the A* algorithm. The robot for this project is the Turtlebot, a two wheeled differential drive robot. It has 8 possible movements, defined by a combination of 3 speeds for the left and right wheels (user defined Fast, Slow, and 0). The default maze is 10200x10200 with 8 obstacles - 4 circles, 3 squares, and a hollow rectangle at the border.
+This project continues the work done in [ENPM661 Project 3 Phase 3!](https://github.com/BrianBock/ENPM661-Project3-Phase-3). In that project, we used A* to find the optimal path through a Cartesian maze with obstacles for a rigid robot. The maze was 10200x10200 mm with 8 obstacles - 4 circles, 3 squares, and a hollow rectangle at the border.
 
-![maze](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/V-Rep_maze.png)
+![maze](https://github.com/BrianBock/ENPM661-Project3-Phase-3/blob/master/Images/maze.png)
 
-The user specifies a start point and goal point in the maze and the program finds the optimal path to the goal.
+In this project, we simulate the Turtlebot 2 driving through the 3D version of this maze in V-Rep. The Turtlebot 2 is a two wheeled differential drive robot. It has 8 possible movements, defined by a combination of 3 speeds for the left and right wheels (user defined Fast, Slow, and 0). 
+
+![V-Rep maze](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/V-Rep_maze.png)
+
 
 ## Dependencies 
 
@@ -68,20 +71,10 @@ If `show_visualization` is set to `True`, the program will show the visualizatio
 
 If `show_solve` is set to `False`, the program will only export an animation of the final path. If you would like to see the full visualization including all searched nodes, toggle `show_solve` to `True`. To speed this up, we only save every `k` frames, a number which can be changed by editing `solve_frame_interval` in the top of `main.py`. Lower intervals will be much slower to export, but have smoother video. If `show_solve` is set to `True`, the visualization first shows all of the searched nodes, rendered as semi-transparent purple squares. The height and width of these squares is determined by our position threshold (`self.pos_thresh` in `robot.py`) by which we discretize our space. Each node can be visited N times, where N=360 deg/angular_thresh. After a searched node is within the goal, the program uses backtracking to find the optimal course which is plotted with orange lines. 
 
-![visualization](https://github.com/BrianBock/ENPM661-Project3-Phase3-4/blob/master/Images/visualization_path-only.gif)
-![Full visualization](https://github.com/BrianBock/ENPM661-Project3-Phase3-4/blob/master/Images/full_viz.gif)
+
 
 ## Videos
 
-Full Visualization: Start(500,500,90), Goal(9500,9500) - https://youtu.be/YgzpRYx1qZM
-
-Start(1100,1000,90), Goal(7000, 6120) - https://youtu.be/C3S3WZDgzS4
-
-Start(1100,1000,90), Goal(8160, 4080) - https://youtu.be/mdABzRMgJLM
-
-Start(1100,1000,90), Goal(9000,9000) - https://youtu.be/rJ3gQGppOLo
-
-Start(1100,1000,90), Goal(5000,8160) - https://youtu.be/Q-o_nECJxok
 
 
 
