@@ -13,18 +13,18 @@ class Robot:
     def __init__(self,maze,userInput):
         # Maze/Solver Params
         self.maze = maze
-        self.pos_thresh = 50
-        self.ang_thresh = 60
-        self.goal_radius = 200
+        self.pos_thresh = 50 # mm
+        self.ang_thresh = 60 # deg
+        self.goal_radius = 200 # mm
 
         #Robot params
         self.clearance = 15
         self.radius = 177 # Robot radius
-        self.wheel_radius=76
+        self.wheel_radius=76 # mm
         self.L=230 # Wheel distance #http://robotics.caltech.edu/wiki/images/9/9a/CSME133a_Lab2_Instructions.pdf
         self.offset=self.clearance+self.radius
         self.min_speed=1
-        self.max_speed=10
+        self.max_speed=100
         
         self.min_time=.1
         self.max_time=10
