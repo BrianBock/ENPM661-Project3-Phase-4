@@ -60,11 +60,13 @@ To make use of one of these pre-solved solutions, please follow the following st
 
 ## Output
 
-The program has several boolean toggles at the top of the of the `main.py` file. If `write_to_video` is set to `True`, the program will output a video of the solution. If `show_solve` is set to `False`, the program will only export an animation of the final path. If you would like to see the full visualization including all searched nodes, toggle `show_solve` to `True`. To speed this up, we only save every `k` frames, a number which can be changed by editing `solve_frame_interval` in the top of `main.py`. Lower intervals will be much slower to export, but have smoother video. 
+The program has several boolean toggles at the top of the of the `main.py` file. If `write_to_video` is set to `True`, the program will output a video of the solution. To do this, the program generates individual frames, saved to the same directory as the code (the second reason you must have write access).
 
-If `show_visualization` is set to `True`, the program will show the visualization as it is being created. **Note that `show_visualization` and `write_to_video` are mutually exclusive. You can export the video or you can watch the visualization as it runs, but you cannot do both.**
+If `show_visualization` is set to `True`, the program will show the visualization as it is being created. 
 
-If `show_solve` is set to `True`, the visualization first shows all of the searched nodes, rendered as semi-transparent purple squares. The height and width of these squares is determined by our position threshold (`self.pos_thresh` in `robot.py`) by which we discretize our space. Each node can be visited N times, where N=360 deg/angular_thresh. After a searched node is within the goal, the program uses backtracking to find the optimal course which is plotted with orange lines. 
+**Note that `show_visualization` and `write_to_video` are mutually exclusive. You can export the video or you can watch the visualization as it runs, but you cannot do both.** You can run `show_solve` with either visualization or video. 
+
+If `show_solve` is set to `False`, the program will only export an animation of the final path. If you would like to see the full visualization including all searched nodes, toggle `show_solve` to `True`. To speed this up, we only save every `k` frames, a number which can be changed by editing `solve_frame_interval` in the top of `main.py`. Lower intervals will be much slower to export, but have smoother video. If `show_solve` is set to `True`, the visualization first shows all of the searched nodes, rendered as semi-transparent purple squares. The height and width of these squares is determined by our position threshold (`self.pos_thresh` in `robot.py`) by which we discretize our space. Each node can be visited N times, where N=360 deg/angular_thresh. After a searched node is within the goal, the program uses backtracking to find the optimal course which is plotted with orange lines. 
 
 ![visualization](https://github.com/BrianBock/ENPM661-Project3-Phase3-4/blob/master/Images/visualization_path-only.gif)
 ![Full visualization](https://github.com/BrianBock/ENPM661-Project3-Phase3-4/blob/master/Images/full_viz.gif)
