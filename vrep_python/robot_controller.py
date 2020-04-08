@@ -22,12 +22,40 @@ except:
     exit()
 
 import time
-from move import move
+
 
 Fast=15
 Slow=5
 moveTime=1
-path_file='maze1.npz'
+path_file='../maze1.npz'
+
+
+
+
+def move(package, left_speed, right_speed):
+
+    clientID=package[0]
+    vrep=package[1]
+    Turtle_Right_Wheel=package[2]
+    Turtle_Left_Wheel=package[3]
+    moveTime=package[4]
+
+    # spin wheels
+    x=vrep.simxSetJointTargetVelocity(clientID,Turtle_Right_Wheel,right_speed,vrep.simx_opmode_blocking);
+    x=vrep.simxSetJointTargetVelocity(clientID,Turtle_Left_Wheel,left_speed,vrep.simx_opmode_blocking);
+    
+    time.sleep(moveTime)
+    
+    # stop wheels
+    x=vrep.simxSetJointTargetVelocity(clientID,Turtle_Right_Wheel,0,vrep.simx_opmode_blocking);
+    x=vrep.simxSetJointTargetVelocity(clientID,Turtle_Left_Wheel,0,vrep.simx_opmode_blocking);
+    time.sleep(.5);
+
+
+
+
+
+
 
 # Connect to V-REP
 print ('Program started')
@@ -50,8 +78,11 @@ if clientID!=-1:
 
     # Load the save file from Phase 3
     if load_from_file and os.path.exists(path_file):
-    with np.load(path_file) as data:
-        action_list = data['actions']
+        with np.load(path_file) as data:
+            action_list = data['actions']
+    else:
+        print("Unable to import "+path_file+". Please check that this file exists and then restart this program.")
+        exit()
 
         #action_list is an ordered list of actions
     for action in action_list:
