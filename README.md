@@ -4,7 +4,7 @@
 
 The goal of this project is to find the optimal path through a Cartesian maze with obstacles for a rigid robot using the A* algorithm. The robot for this project is the Turtlebot, a two wheeled differential drive robot. It has 8 possible movements, defined by a combination of 3 speeds for the left and right wheels (user defined Fast, Slow, and 0). The default maze is 10200x10200 with 8 obstacles - 4 circles, 3 squares, and a hollow rectangle at the border.
 
-![maze](https://github.com/BrianBock/ENPM661-Project3-Phase3-4/blob/master/Images/maze.png)
+![maze](https://github.com/BrianBock/ENPM661-Project3-Phase3-4/blob/master/Images/V-Rep_maze.png)
 
 The user specifies a start point and goal point in the maze and the program finds the optimal path to the goal.
 
