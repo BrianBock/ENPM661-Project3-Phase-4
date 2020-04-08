@@ -19,6 +19,7 @@ except:
     print ('or appropriately adjust the file "vrep.py"')
     print ('--------------------------------------------------------------')
     print ('')
+    exit()
 
 import time
 from move import move
@@ -26,6 +27,7 @@ from move import move
 Fast=15
 Slow=5
 moveTime=1
+path_file='maze1.npz'
 
 # Connect to V-REP
 print ('Program started')
@@ -43,16 +45,56 @@ if clientID!=-1:
 
 
 
-    # Drive the Robot
-    move(package, Fast,Fast)
-    move(package, Fast,Slow)
-    move(package, Fast,0)
+
+    
+
+    # Load the save file from Phase 3
+    if load_from_file and os.path.exists(path_file):
+    with np.load(path_file) as data:
+        action_list = data['actions']
+
+        #action_list is an ordered list of actions
+    for action in action_list:
+        direction=action[0]
+
+        if direction == "FastFast":
+            ul=Fast
+            ur=Slow
+        elif direction == "FastSlow":
+            ul=Fast
+            ur=Slow
+        elif direction == "Fast0":
+            ul=Fast
+            ur=0
+        elif direction == "SlowFast":
+            ul=Slow
+            ur=Fast
+        elif direction == "SlowSlow":
+            ul=Slow
+            ur=Slow
+        elif direction == "Slow0":
+            ul=Slow
+            ur=0
+        elif direction == "0Fast":
+            ul=0
+            ur=Fast
+        elif direction == "0Slow":
+            ul=0
+            ur=Slow
+
+        # Drive the Robt
+        move(package,ul,ur)
+
+    # # Drive the Robot
+    # move(package, Fast,Fast)
+    # move(package, Fast,Slow)
+    # move(package, Fast,0)
 
 
-    time.sleep(1)
-    move(package, Slow,Fast)
-    move(package, Slow,Slow)
-    move(package, Slow,0)
+    # time.sleep(1)
+    # move(package, Slow,Fast)
+    # move(package, Slow,Slow)
+    # move(package, Slow,0)
 
 
 
