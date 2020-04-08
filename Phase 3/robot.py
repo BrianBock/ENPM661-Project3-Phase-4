@@ -5,7 +5,7 @@ import time
 import os
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.collections import PatchCollection
-from matplotlib.patches import Ellipse, Circle, Wedge, Polygon, Arrow
+from matplotlib.patches import Ellipse, Circle, Wedge, Polygon, Arrow, Rectangle
 import matplotlib.pyplot as plt
 import bisect
 
@@ -13,8 +13,8 @@ class Robot:
     def __init__(self,maze,userInput):
         # Maze/Solver Params
         self.maze = maze
-        self.pos_thresh = 15
-        self.ang_thresh = 10
+        self.pos_thresh = 50
+        self.ang_thresh = 60
         self.goal_radius = 200
 
         #Robot params
@@ -38,11 +38,11 @@ class Robot:
             # self.start = (1100,1000,90)
             # self.goal = (2000,1000)
             #Hard
-            self.start = (895,1600,90)
-            self.goal = (5000,1600)
-            self.fast = 8
-            self.slow = 1
-            self.move_time=1
+            self.start = (500,500,90)
+            self.goal = (9500,9500)
+            self.fast = 80
+            self.slow = 10
+            self.move_time=.1
             # self.d = 10
         
         self.run_params="-s"+str(self.start)+"-g"+str(self.goal)+"-"+str(self.fast)+","+str(self.slow)+"-t"+str(self.move_time)
@@ -441,9 +441,8 @@ class Robot:
         
 
 
-    def visualize(self,output,show,showSolve):
+    def visualize(self,output,show,showSolve,solve_frame_interval):
         load_from_file=True
-        solve_frame_interval=200
         path_frame_interval=1
 
         if load_from_file and os.path.exists(self.path_file):
@@ -453,115 +452,169 @@ class Robot:
                 self.parents = data['parents']
         
 
-
+        if show:
+            plt.ion()
 
         
         if output:
             fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
             filename = 'Simulation Videos/'+self.run_params+'.mp4'
-            # fourcc = cv2.VideoWriter_fourcc(*'XVID')
-            # filename = self.run_params+'.avi'
             fps_out = 50
-
-            print('Writing to video. Please Wait.')
-            
-            if os.path.exists(filename):
-                os.remove(filename)
-            
             out_plt = cv2.VideoWriter(filename, fourcc, fps_out, (800,800))
+            print('Writing to video. Please Wait.')
         
-        canvas = FigureCanvas(self.maze.fig)
+
+            video_images_path='Video images'
+            if os.path.exists(video_images_path):
+                for img in os.listdir(video_images_path):
+                    if img.endswith('.png'):
+                        os.remove(video_images_path+'/'+img)
+            else:    
+                os.mkdir(video_images_path)
+            
         
+                
         
         if showSolve:
-            count=0
+            # count=0
+            frame=0
+            print("There are "+str(len(self.nodes))+" nodes.")
+            patches=[]
             # Show the searched nodes
             for point in self.nodes:
-                # print(count)
-                # neighborhood,d_list=self.check_neighbors(point)
-                # for neighbor in neighborhood:
+
+                # Create a rectangle for each node
                 disc_node = self.discretize(point)
-                parent_node = int(self.parents[disc_node[0],disc_node[1],disc_node[2]])
+                roundx=disc_node[0]*self.pos_thresh
+                roundy=disc_node[1]*self.pos_thresh
+                if roundx > point[0]:
+                    roundx-=self.pos_thresh
+                if roundy > point[1]:
+                    roundy-=self.pos_thresh
 
-                if parent_node == -1:
-                    parent = self.start
-                else:
-                    parent = self.nodes[parent_node]
 
-                arrow = self.plotter(parent,point,color='cyan')
-                self.maze.ax.add_artist(arrow)
+                rect_node=Rectangle((roundx,roundy), self.pos_thresh, self.pos_thresh)
+                patches.append(rect_node)
 
-                if count>=solve_frame_interval:
-                    self.maze.fig.canvas.draw()
-                    maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
-                    maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
-
-                    if output:
-                        out_plt.write(maze_img)             
-
-                    if show:
-                        if cv2.waitKey(1) == ord('q'):
-                            exit()
-                        cv2.imshow('Visualization',maze_img)    
                 
-                    count=0
+                # Only do this for every 'solve_frame_interval'
+                if frame%solve_frame_interval==0 or frame == len(self.nodes):
+                    p = PatchCollection(patches, color='purple', alpha=.1)
+                    # p.set_array(np.array(colors))
+                    self.maze.ax.add_collection(p)
 
-                arrow.remove()
-                arrow = self.plotter(parent,point,color='gray')
-                self.maze.ax.add_artist(arrow)
-                count+=1
+                    if output and not show:
+                        fname=video_images_path+'/'
+                        fname+=('0000000000'+str(frame))[-10:]+'.png'
+                        plt.savefig(fname)
 
+                    if show and not output:
+                        plt.draw()
+                        plt.pause(.00001)
+                    
+                    patches=[]
+                    print(frame)
+
+                frame+=1
+
+        # Add the robot circle
         robot_circle=plt.Circle((self.path[0][0],self.path[0][1]), self.offset, color='orange')
         self.maze.ax.add_artist(robot_circle)
-        self.maze.fig.canvas.draw()
-        maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
-        maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
 
-        if output:          
-            out_plt.write(maze_img)
+        if output and not show:
+            print(frame)
+            fname=video_images_path+'/'
+            fname+=('0000000000'+str(frame))[-10:]+'.png'
+            plt.savefig(fname)
+            frame+=1
 
-        if show:
-            cv2.imshow('Visualization',maze_img)
-            if cv2.waitKey(1) == ord('q'):
-                exit()
+        if show and not output:
+            plt.draw()
+            plt.pause(.00001)
 
         # Draw the path
-        count=0
         for i in range(len(self.path)-1):
             #Remove the previous circle
             robot_circle.remove()
 
             # Plot the path arrows
-            arrow = self.plotter(self.path[i],self.path[i+1],color='red')
+            arrow = self.plotter(self.path[i],self.path[i+1],color='orange')
             self.maze.ax.add_artist(arrow)
 
             # Plot the robot
-            robot_circle=plt.Circle((self.path[i+1][0],self.path[i+1][1]), self.offset, color='orange')
+            robot_circle=plt.Circle((self.path[i+1][0],self.path[i+1][1]), self.offset, color='black')
             self.maze.ax.add_artist(robot_circle)
 
-            if count>=path_frame_interval:
-                self.maze.fig.canvas.draw()
-                maze_img = np.frombuffer(self.maze.fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(self.maze.fig.canvas.get_width_height()[::-1] + (3,))
-                maze_img = cv2.cvtColor(maze_img,cv2.COLOR_RGB2BGR)
 
-                if output:          
-                    out_plt.write(maze_img)
+            if output and not show:
+                fname=video_images_path+'/'
+                fname+=('0000000000'+str(frame))[-10:]+'.png'
+                plt.savefig(fname)
+                frame+=1
 
-                if show:
-                    cv2.imshow('Visualization',maze_img)
-                    if cv2.waitKey(1) == ord('q'):
-                        exit()
-                    if i == len(self.path)-2:
-                        cv2.waitKey(0)
-                    path_frame_interval=0
+            if show and not output:
+                plt.draw()
+                plt.pause(.00001)
 
-                count=0
-            count+=1
+
+        # Turn the Frames into a Video
 
         if output:
+            print("Finished exporting frames. Time to convert them into a video")
+            if os.path.exists(video_images_path):
+                file_list=os.listdir(video_images_path)
+                file_list.sort()
+                print(file_list)
+                for img in file_list:
+                    if img.endswith('.png'):
+                        new_frame=cv2.imread(video_images_path+'/'+img)
+                        out_plt.write(new_frame)
+
+           
+            # Finalize the video
             out_plt.release()
 
+            # # Clean up the frames
+            # if os.path.exists(video_images_path):
+            #     for img in os.listdir(video_images_path):
+            #         if img.endswith('.png'):
+            #             os.remove(video_images_path+'/'+img)
+
+    print("Done!")
+
         
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             
 

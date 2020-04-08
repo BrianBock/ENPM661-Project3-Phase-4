@@ -7,17 +7,22 @@ from maze import Maze
 from robot import Robot
 
 # Visualization and Video
+# visualization and video are mutually exclusive
 write_to_video = True
 show_visualization = False
-show_solve=False #show every step of the solution to the video/visualization (if True)
+show_solve=True #show every step of the solution to the video/visualization (if True)
+solve_frame_interval=100 # Update the visualization/video every this many nodes (higher numbers run faster)
 
 # Allow for user input start/goal coordinates, wheel speeds, and move time
 userInput = False
 
 # Precomputed Saves
-trySolve=True #Toggle False if you want to use a precomputed save
+trySolve=False #Toggle False if you want to use a precomputed save
 
 
+if write_to_video and show_visualization:
+	print("Visualization and video are mutually exclusive. Please change one and try again. Exiting.")
+	exit()
 
 
 # Construct maze object
@@ -50,7 +55,7 @@ if trySolve:
 
 
 # Visualize the path
-robot.visualize(write_to_video,show_visualization,show_solve)
+robot.visualize(write_to_video,show_visualization,show_solve,solve_frame_interval)
 endtime = dtime.now()
 runtime=endtime-starttime
 print("Finished in "+str(runtime)+" (hours:min:sec)")
