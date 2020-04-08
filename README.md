@@ -16,14 +16,17 @@ Start: (895,1600), Goal: (5000, 1600)
 
 Start: (1035, 700), Goal: (9300, 7600)
 
+This project was built in V-Rep v3.6.2 (the version that predates the CoppeilaSim rebrand). Python communicates with V-Rep over the [V-Rep remote API](https://www.coppeliarobotics.com/helpFiles/en/remoteApiClientSide.htm). You may need to add the `remote.Api.dll`, or `remoteApi.so` file frmo your install of V-Rep to run this program, depending on your platform. This version has been built to run on macOS 10.15.
+
 ## Dependencies 
 
-    V-Rep
+    V-Rep v3.6.2
+    Python 3.7
 
 
 ## Instructions for Running the Program - Phase 3
-
-To run the program, clone this repository to a directory you have write access to. Open a new terminal window and navigate to the Phase 3 directory. Type `python main.py`, if you have additional older versions of python installed you may need to run `python3` instead. 
+Clone this repository. 
+Open the `vrep_sim.ttt` file with V-Rep. Hit the Purple play icon in the top menu bar to start the simulation. Once the simulation is running, open a new terminal window and navigate to the cloned Phase 4 directory. Type `python main.py`, if you have additional older versions of python installed you may need to run `python3` instead. If you try to launch the python file before the simulation runs, it will not work. 
 
 The program will prompt you for a coordinate system. You have 3 choices - image coordinates have the origin at the top left, with positive y in the downward direction, and positive x in the rightward direction. Cartesian coordinates have the origin in the bottom left, with positive y in the upward direction, and positive x in the rightward direction. Gazebo coordinates have the origin at the center, with positive y in the upward direction, and positive x in the rightward direction. Regardless of your coordinate system choice, the output visualizaion will be shown in Cartesian coordinates. 
 
@@ -56,15 +59,6 @@ To make use of one of these pre-solved solutions, please follow the following st
 4. Run `main.py`. 
 
 
-## Output
-
-The program has several boolean toggles at the top of the of the `main.py` file. If `write_to_video` is set to `True`, the program will output a video of the solution. To do this, the program generates individual frames, saved to the same directory as the code (the second reason you must have write access).
-
-If `show_visualization` is set to `True`, the program will show the visualization as it is being created. 
-
-**Note that `show_visualization` and `write_to_video` are mutually exclusive. You can export the video or you can watch the visualization as it runs, but you cannot do both.** You can run `show_solve` with either visualization or video. 
-
-If `show_solve` is set to `False`, the program will only export an animation of the final path. If you would like to see the full visualization including all searched nodes, toggle `show_solve` to `True`. To speed this up, we only save every `k` frames, a number which can be changed by editing `solve_frame_interval` in the top of `main.py`. Lower intervals will be much slower to export, but have smoother video. If `show_solve` is set to `True`, the visualization first shows all of the searched nodes, rendered as semi-transparent purple squares. The height and width of these squares is determined by our position threshold (`self.pos_thresh` in `robot.py`) by which we discretize our space. Each node can be visited N times, where N=360 deg/angular_thresh. After a searched node is within the goal, the program uses backtracking to find the optimal course which is plotted with orange lines. 
 
 
 
@@ -75,4 +69,4 @@ If `show_solve` is set to `False`, the program will only export an animation of 
 
 ## Github
 
-You can view all of the code related to this project on our Github: https://github.com/BrianBock/ENPM661-Project3-Phase3-4
+You can view all of the code related to this project on our Github: https://github.com/BrianBock/ENPM661-Project3-Phase-4
