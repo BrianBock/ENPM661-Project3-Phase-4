@@ -574,13 +574,13 @@ class Robot:
             # Finalize the video
             out_plt.release()
 
-            # # Clean up the frames
-            # if os.path.exists(video_images_path):
-            #     for img in os.listdir(video_images_path):
-            #         if img.endswith('.png'):
-            #             os.remove(video_images_path+'/'+img)
+            # Clean up the frames
+            if os.path.exists(video_images_path):
+                for img in os.listdir(video_images_path):
+                    if img.endswith('.png'):
+                        os.remove(video_images_path+'/'+img)
 
-    print("Done!")
+        print("Done!")
 
         
        
