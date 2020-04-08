@@ -65,7 +65,7 @@ The program has several boolean toggles at the top of the of the `main.py` file.
 If `show_solve` is set to `True`, the visualization first shows all of the searched nodes. For each node in the list of searched nodes any of the viable neighbors of that node are plotted as arrows. The current arrow is show in cyan. After a searched node is within the goal, the program uses backtracking to find the optimal course which is plotted with red arrows. 
 
 ![visualization](https://github.com/BrianBock/ENPM661-Project3-Phase3-4/blob/master/Images/visualization_path-only.gif)
-
+![visualization](https://github.com/BrianBock/ENPM661-Project3-Phase3-4/blob/master/Images/full-viz.gif)
 
 ## Videos
 
@@ -76,6 +76,9 @@ Start(1100,1000,90), Goal(8160, 4080) - https://youtu.be/mdABzRMgJLM
 Start(1100,1000,90), Goal(9000,9000) - https://youtu.be/rJ3gQGppOLo
 
 Start(1100,1000,90), Goal(5000,8160) - https://youtu.be/Q-o_nECJxok
+
+Start(500,500,90), Goal(9500,9500) - https://youtu.be/YgzpRYx1qZM
+
 
 ## Github
 
