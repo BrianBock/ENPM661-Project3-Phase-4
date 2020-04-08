@@ -2,28 +2,23 @@
 
 ## Introduction
 
-This project continues the work done in [ENPM661 Project 3 Phase 3!](https://github.com/BrianBock/ENPM661-Project3-Phase-3). In that project, we used A* to find the optimal path through a Cartesian maze with obstacles for a rigid robot. The maze was 10200x10200 mm with 8 obstacles - 4 circles, 3 squares, and a hollow rectangle at the border.
+This project continues the work done in [ENPM661 Project 3 Phase 3](https://github.com/BrianBock/ENPM661-Project3-Phase-3). In that project, we used A* to find the optimal path through a Cartesian maze with obstacles for a rigid robot. The maze was 10200x10200 mm with 8 obstacles - 4 circles, 3 squares, and a hollow rectangle at the border.
 
-![maze](https://github.com/BrianBock/ENPM661-Project3-Phase-3/blob/master/Images/maze.png)
+![maze](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/maze.png)
 
 In this project, we simulate the Turtlebot 2 driving through the 3D version of this maze in V-Rep. The Turtlebot 2 is a two wheeled differential drive robot. It has 8 possible movements, defined by a combination of 3 speeds for the left and right wheels (user defined Fast, Slow, and 0). 
 
 ![V-Rep maze](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/V-Rep_maze.png)
 
+There are two start and goal configurations (coordinates are in Cartesian coordinates):
+
+Start: (895,1600), Goal: (5000, 1600)
+
+Start: (1035, 700), Goal: (9300, 7600)
 
 ## Dependencies 
 
-    cv2
-    numpy
-    matplotlib
-    matplotlib.backends.backend_agg
-    matplotlib.collections
-    matplotlib.patches
-    matplotlib.pyplot
-    datetime
-    bisect
-    math
-    os
+    V-Rep
 
 
 ## Instructions for Running the Program - Phase 3
