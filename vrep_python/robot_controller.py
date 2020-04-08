@@ -22,6 +22,7 @@ except:
     exit()
 
 import time
+import os
 
 
 Fast=15
@@ -77,11 +78,11 @@ if clientID!=-1:
     
 
     # Load the save file from Phase 3
-    if load_from_file and os.path.exists(path_file):
+    if os.path.exists(path_file):
         with np.load(path_file) as data:
             action_list = data['actions']
     else:
-        print("Unable to import "+path_file+". Please check that this file exists and then restart this program.")
+        print("Unable to import '"+path_file+"'. Please check that this file exists and then restart this program.")
         exit()
 
         #action_list is an ordered list of actions
