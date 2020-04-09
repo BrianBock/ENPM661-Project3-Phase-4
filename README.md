@@ -17,12 +17,15 @@ Start: (895,1600), Goal: (5000, 1600)
 
 Start: (1035, 700), Goal: (9300, 7600)
 
-This project was built in Webots.
+This project was built in [Webots](https://cyberbotics.com/).
 
 
 ## Instructions for Running the Program - Phase 4
 
-This project utilizes solution files exported from our [Phase 3](https://github.com/BrianBock/ENPM661-Project3-Phase-3). We've included the solution files required for the two start/goal configurations for this project. If you would like to try a different start and goal configuration, there are instructions on how to do so below.
+Download and install Webots from https://cyberbotics.com/#download. Navigate to `\webots_project\worlds\phase4.wbt` and open that file in Webots. When the world has finished loading, hit the grey play button in the center of the top menu bar to play the simulation. You can watch the simulation run in near-real time, or use the button to the right of the play button to speed up the simulation. 
+
+
+This project utilizes solution files exported from our [Phase 3](https://github.com/BrianBock/ENPM661-Project3-Phase-3). We've included the solution files required for the two start/goal configurations for this project. If you would like to try a different start and goal configuration, there are instructions on how to do so in the section below. 
 
 
 ## Trying Different Start/Goal/Speed Configurations
