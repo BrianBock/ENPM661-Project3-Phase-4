@@ -29,6 +29,8 @@ This project utilizes solution files exported from our [Phase 3](https://github.
 
 ## Videos
 
+We've included the cooresponding video outputs from Phase 3, so you can compare the simulated trajectory. 
+
 Video 1 (Angled view) - https://youtu.be/_ZxGPbN_xco
 
 Video 1 (Top View) - https://youtu.be/LnL1jkQIxTE
