@@ -27,16 +27,6 @@ Download and install Webots from https://cyberbotics.com/#download. Navigate to 
 
 This project utilizes solution files exported from our [Phase 3](https://github.com/BrianBock/ENPM661-Project3-Phase-3). We've included the solution files required for the two start/goal configurations for this project. If you would like to try a different start and goal configuration, there are instructions on how to do so in the section below. 
 
-
-## Trying Different Start/Goal/Speed Configurations
-Read the [Phase 3](https://github.com/BrianBock/ENPM661-Project3-Phase-3) documentation to understand how to set your desired parameters. When that is configured the way you'd like, run Phase 3 to export a new solution file. Copy that solution file to `webots_project\controllers\burger_controller\`. You'll see other save files in that same folder. Open `burger_controller.py` (our own Turtlebot3 Burger robot control script) and edit the `path_file` to match the name of the new save file. Save and close the Python file. Open the Webots world. The start position of the Burger is defined in Webots, not Python. Select the Turtlebot3 on the side menu, and adjust it's position to wherever you want it. 
-
-![Change Burger Start](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/changeturtlestart.gif) 
-
-
-
-Minor positioning errors compound over long sequences of moves, causing the second video to have siginifcant positional errors. 
-
 ## Videos
 
 Video 1 (Angled view) - https://youtu.be/_ZxGPbN_xco
@@ -52,6 +42,13 @@ Minor errors (not noticable in the short sequence of video 1) compound over long
 Video 2 - https://youtu.be/nPD7iIGRZ5Q
 
 ![Video 2](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/vid2.gif)
+
+
+## Trying Different Start/Goal/Speed Configurations
+Read the [Phase 3](https://github.com/BrianBock/ENPM661-Project3-Phase-3) documentation to understand how to set your desired parameters. When that is configured the way you'd like, run Phase 3 to export a new solution file. Copy that solution file to `webots_project\controllers\burger_controller\`. You'll see other save files in that same folder. Open `burger_controller.py` (our own Turtlebot3 Burger robot control script) and edit the `path_file` to match the name of the new save file. Save and close the Python file. Open the Webots world. The start position of the Burger is defined in Webots, not Python. Select the Turtlebot3 on the side menu, and adjust it's position to wherever you want it. 
+
+![Change Burger Start](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/changeturtlestart.gif) 
+
 
 
 ## Github
