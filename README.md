@@ -6,9 +6,9 @@ This project continues the work done in [ENPM661 Project 3 Phase 3](https://gith
 
 ![maze](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/maze.png)
 
-In this project, we simulate the Turtlebot 2 driving through the 3D version of this maze in V-Rep. The Turtlebot 2 is a two wheeled differential drive robot. It has 8 possible movements, defined by a combination of 3 speeds for the left and right wheels (user defined Fast, Slow, and 0). 
+In this project, we simulate the Turtlebot 2 driving through the 3D version of this maze in Webots. The Turtlebot 2 is a two wheeled differential drive robot. It has 8 possible movements, defined by a combination of 3 speeds for the left and right wheels (user defined Fast, Slow, and 0). 
 
-![V-Rep maze](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/V-Rep_maze.png)
+![V-Rep maze](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/phase4_webots.png)
 
 There are two start and goal configurations (coordinates are in Cartesian coordinates):
 
@@ -16,7 +16,7 @@ Start: (895,1600), Goal: (5000, 1600)
 
 Start: (1035, 700), Goal: (9300, 7600)
 
-This project was built in V-Rep v3.6.2 (the version that predates the CoppeilaSim rebrand). Python communicates with V-Rep over the [V-Rep remote API](https://www.coppeliarobotics.com/helpFiles/en/remoteApiClientSide.htm). You may need to add the `remote.Api.dll`, or `remoteApi.so` file frmo your install of V-Rep to run this program, depending on your platform. This version has been built to run on macOS 10.15.
+This project was built in Webots.<!--  v3.6.2 (the version that predates the CoppeilaSim rebrand). Python communicates with V-Rep over the [V-Rep remote API](https://www.coppeliarobotics.com/helpFiles/en/remoteApiClientSide.htm). You may need to add the `remote.Api.dll`, or `remoteApi.so` file frmo your install of V-Rep to run this program, depending on your platform. This version has been built to run on macOS 10.15. -->
 
 ## Dependencies 
 
