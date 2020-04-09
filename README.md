@@ -43,10 +43,15 @@ Video 1 (Angled view) - https://youtu.be/_ZxGPbN_xco
 
 Video 1 (Top View) - https://youtu.be/LnL1jkQIxTE
 
+
+![Video 1](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/vid1.gif)
+
+
 Minor errors (not noticable in the short sequence of video 1) compound over long sequences of moves, causing the second video to have siginifcant positional errors. 
 
 Video 2 - https://youtu.be/nPD7iIGRZ5Q
 
+![Video 2](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/vid2.gif)
 
 
 ## Github
