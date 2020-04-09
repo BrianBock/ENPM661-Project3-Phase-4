@@ -1,0 +1,110 @@
+#VRML_SIM R2020a utf8
+WorldInfo {
+}
+Viewpoint {
+  orientation 0.9999349045911196 0.0010477004384468766 -0.01136172980404176 5.291103208677169
+  position -0.3116900174577897 13.85649543341711 8.954285613406888
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 10 10
+  floorTileSize 2 2
+}
+TurtleBot3Burger {
+  translation -4.105 0 3.4
+  rotation 0 1 0 3.14159265
+  controller "burger_controller"
+}
+Solid {
+  translation 0 0.1 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+      }
+      geometry Cylinder {
+        height 0.2
+      }
+    }
+  ]
+}
+Solid {
+  translation 2 0.1 3
+  children [
+    Shape {
+      appearance PBRAppearance {
+      }
+      geometry Cylinder {
+        height 0.2
+      }
+    }
+  ]
+  name "solid(1)"
+}
+Solid {
+  translation -2 0.1 3
+  children [
+    Shape {
+      appearance PBRAppearance {
+      }
+      geometry Cylinder {
+        height 0.2
+      }
+    }
+  ]
+  name "solid(2)"
+}
+Solid {
+  translation 2 0.1 -3
+  children [
+    Shape {
+      appearance PBRAppearance {
+      }
+      geometry Cylinder {
+        height 0.2
+      }
+    }
+  ]
+  name "solid(3)"
+}
+Solid {
+  translation -2 0.1 -3
+  children [
+    Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 1.5 0.2 1.5
+      }
+    }
+  ]
+  name "solid(4)"
+}
+Solid {
+  translation -4 0.1 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 1.5 0.2 1.5
+      }
+    }
+  ]
+  name "solid(5)"
+}
+Solid {
+  translation 4 0.1 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 1.5 0.2 1.5
+      }
+    }
+  ]
+  name "solid(6)"
+}
