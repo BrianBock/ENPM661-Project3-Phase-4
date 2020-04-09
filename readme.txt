@@ -1,138 +1,58 @@
-# ENPM661 Project 3 Phase 3 and 4
+# ENPM661 Project 3 Phase 4 - Simulation
 
 ## Introduction
 
-The goal of this project is to find the optimal path through a Cartesian maze with obstacles for a rigid robot using the A* algorithm. The robot for this project is the Turtlebot, a two wheeled differential drive robot. It has 8 possible movements, defined by a combination of 3 speeds for the left and right wheels (user defined Fast, Slow, and 0). The default maze is 10200x10200 with 8 obstacles - 4 circles, 3 squares, and a hollow rectangle at the border.
+This project continues the work done in [ENPM661 Project 3 Phase 3](https://github.com/BrianBock/ENPM661-Project3-Phase-3). In that project, we used A* to find the optimal path through a Cartesian maze with obstacles for a rigid robot. The maze was 10200x10200 mm with 8 obstacles - 4 circles, 3 squares, and a hollow rectangle at the border.
 
-![maze](https://github.com/BrianBock/ENPM661-Project3-Phase3-4/blob/master/Images/maze.png)
+![maze](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/maze.png)
 
-The user specifies a start point and goal point in the maze and the program finds the optimal path to the goal.
+In this project, we simulate the Turtlebot 3 Burger driving through the 3D version of this maze in Webots. The Burger is a two wheeled differential drive robot. It has 8 possible movements, defined by a combination of 3 speeds for the left and right wheels (user defined Fast, Slow, and 0). According to the [Burger specifications](http://emanual.robotis.com/docs/en/platform/turtlebot3/specifications/) the max wheel speed of the Bruger is 2.84 rad/s.
 
-## Dependencies 
-
-    cv2
-    numpy
-    matplotlib
-    matplotlib.backends.backend_agg
-    matplotlib.collections
-    matplotlib.patches
-    matplotlib.pyplot
-    datetime
-    bisect
-    math
-    os
+![Webots maze](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/phase4_webots.png)
 
 
-## Instructions for Running the Program - Phase 3
+There are two start and goal configurations (coordinates are in Cartesian coordinates):
 
-To run the program, clone this repository to a directory you have write access to. Open a new terminal window and navigate to the Phase 3 directory. Type `python main.py`, if you have additional older versions of python installed you may need to run `python3` instead. 
+Start: (895,1600), Goal: (5000, 1600)
 
-The program will prompt you for a coordinate system. You have 3 choices - image coordinates have the origin at the top left, with positive y in the downward direction, and positive x in the rightward direction. Cartesian coordinates have the origin in the bottom left, with positive y in the upward direction, and positive x in the rightward direction. Gazebo coordinates have the origin at the center, with positive y in the upward direction, and positive x in the rightward direction. Regardless of your coordinate system choice, the output visualizaion will be shown in Cartesian coordinates. 
+Start: (1035, 700), Goal: (9300, 7600)
 
-Once you have selected a coordinate system, you'll be prompted to enter a start point, goal point, and the fast and slow speeds for the robot's wheels. If the points are valid and a solution is possible, the program will solve then show the visualization of the solution. This mode treats your robot as a circle with the given radius and expands all of the obstacles by the radius and clearance.
-
-In our tests, the program usually solves the path 5-35 minutes (depending on all the run parameters, worst case - 6 hours, 51 min), but can take much longer to export the visualization/video. 
+This project was built in [Webots](https://cyberbotics.com/).
 
 
-## Pre-Computed Solves
-When the program finishes solving the path, it saves all of the relevant solution information to a file in the `Solve Files` directory (which is why you must have write privileges to the directory you save this repo to). The file name for each solution file details that run's parameters. For example: 
+## Instructions for Running the Program - Phase 4
 
-`path_file-s(1100, 1000, 90)-g(9000, 9000)-8,1-t1.npz`
-
-Start: (1100, 1000, 90)
-
-Goal: (9000, 9000)
-
-Fast Speed: 8
-
-Slow Speed: 1
-
-Move Time: 1
-
-We ran several different goal configurations and saved them to these files. This allows the solution to be computed independent of visualization. Some of these solutions took several hours to compute. The simplest visualization (just the final path and robot) is significantly faster than full visualization (every node checked), but still takes several minutes (as much as a half hour, in one configuration). With the solution saved, we can run either visualization at a later time. 
-
-To make use of one of these pre-solved solutions, please follow the following steps:
-1. Use the file name of the solution to get the run parameters (as shown above)
-2. Enter those parameters in the Init section of `robot.py`. The numbers must exactly match.
-3. In the top of `main.py`, toggle `trySolve` to False. 
-4. Run `main.py`. 
+Download and install Webots from https://cyberbotics.com/#download. Navigate to either `\webots_project\worlds\phase4_1.wbt` or  `\webots_project\worlds\phase4_2.wbt` and open that file in Webots. When the world has finished loading, hit the grey play button in the center of the top menu bar to play the simulation. You can watch the simulation run in near-real time, or use the button to the right of the play button to speed up the simulation. 
 
 
-## Output
-
-The program has several boolean toggles at the top of the of the `main.py` file. If `write_to_video` is set to `True`, the program will output a video of the solution. This is often a time consuming step. By default, the program will only export an animation of the final path, which runs much faster. If you would like to see the full visualization including all searched nodes, toggle `show_solve` to `True`. As a warning, this step can take considerable time, often several hours. To speed this up, we only save every `k` frames, a number which can be changed by editing `solve_frame_interval` in the visualization section of `robot.py`. Lower intervals will be much slower to export. If `show_visualization` is set to `True`, the program will show the visualization as it is being created. 
-
-If `show_solve` is set to `True`, the visualization first shows all of the searched nodes. For each node in the list of searched nodes any of the viable neighbors of that node are plotted as arrows. The current arrow is show in cyan. After a searched node is within the goal, the program uses backtracking to find the optimal course which is plotted with red arrows. 
-
-![visualization](https://github.com/BrianBock/ENPM661-Project3-Phase3-4/blob/master/Images/visualization_path-only.gif)
-
+This project utilizes solution files exported from our [Phase 3](https://github.com/BrianBock/ENPM661-Project3-Phase-3). We've included the solution files required for the two start/goal configurations for this project. If you would like to try a different start and goal configuration, there are instructions on how to do so in the section below. 
 
 ## Videos
 
-Start(1100,1000,90), Goal(7000, 6120) - https://youtu.be/C3S3WZDgzS4
+We've included the cooresponding video outputs from Phase 3, so you can compare the simulated trajectory. 
 
-Start(1100,1000,90), Goal(8160, 4080) - https://youtu.be/mdABzRMgJLM
+Video 1 (Angled view) - https://youtu.be/_ZxGPbN_xco
 
-Start(1100,1000,90), Goal(9000,9000) - https://youtu.be/rJ3gQGppOLo
+Video 1 (Top View) - https://youtu.be/LnL1jkQIxTE
 
-Start(1100,1000,90), Goal(5000,8160) - https://youtu.be/Q-o_nECJxok
+
+![Video 1](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/vid1.gif)
+
+
+Minor errors (not noticable in the short sequence of video 1) compound over long sequences of moves, causing the second video to have siginifcant positional errors. 
+
+Video 2 - https://youtu.be/nPD7iIGRZ5Q
+
+![Video 2](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/vid2.gif)
+
+
+## Trying Different Start/Goal/Speed Configurations
+Read the [Phase 3](https://github.com/BrianBock/ENPM661-Project3-Phase-3) documentation to understand how to set your desired parameters. When that is configured the way you'd like, run Phase 3 to export a new solution file. Copy that solution file to `webots_project\controllers\burger_controller\`. You'll see other save files in that same folder. Open `burger_controller.py` (our own Turtlebot3 Burger robot control script) and edit the `path_file` to match the name of the new save file. Save and close the Python file. Open the Webots world. The start position of the Burger is defined in Webots, not Python. Select the Turtlebot3 on the side menu, and adjust it's position to wherever you want it. Note that the origin in Webots is in the center with positive Z in the downward direction and positive X to the right. Y is out of the plane of floor. For our purposes, we can treat the Z axis like our Y axis. 
+
+![Change Burger Start](https://github.com/BrianBock/ENPM661-Project3-Phase-4/blob/master/Images/changeturtlestart.gif) 
+
+
 
 ## Github
 
-You can view all of the code related to this project on our Github: https://github.com/BrianBock/ENPM661-Project3-Phase3-4
-
-
-## Creating New Mazes
-
-The maze is generated by reading in a text file. New mazes can be generated by creating new text files that follow the same format. 
-
-The first parameters needed to establish a maze is the height and width of the maze in points. This can be specified by the lines. **Note it is crucial to use a colon** `:`
-
-    height: XX
-    width: XX
-
-The code currently supports four different types of obstacles; circles, ellipses, polygons, and rotated rectangles. Depending on the type of obstacle you want to generate, different parameters are needed. All coordinates are in Cartesian coordinates, with the origin at the bottom left corner of the maze.  
-
-### Circle
-For a circle the file needs to contain a center point (x,y) and a radius (r). The lines in text file should look like this
-
-    circle
-        center: x,y
-        radius: r
-
-### Ellipse
-To add a rotated rectangle obstacle you need to specify the center point (x,y), the major and minor axis (a1,a2), the rotation angle in degrees, and the start and end angles in degrees. To specify the entire ellipse the start should be 0 and the end 360. The lines in text file should look like this
-
-    ellipse
-        center: x,y
-        axis: a1,a2
-        angle: a 
-        start: a
-        end: a
-        
-
-### Polygon
-To add a polygon obstacle you need to specify all points that make up the exterior of the polygon in the form (x,y). The program will draw lines between each point so the order matters - they must be defined clockwise. It does not matter which point you start from. The lines in text file should look like this
-
-    polygon
-        point: x1,y1
-        point: x2,y2
-        point: x3,y3
-        point: x4,y4
-
-### Rotated Rectangle
-To add a rotated rectangle obstacle you need to specify the position of the starting corner (the code currently only supports the starting corner as the bottom right corner), the length of both sides l1 and l2, and the rotation angle. The lines in text file should look like this
-
-    rotatedrect
-        start_point: x,y
-        l1: l1
-        l2: l2
-        angle: a
-
-### Aditional Properties
-Each obstacles can also have a specified color and alpha. To specify these properties, add color and alpha lines under the given obstacle. The color can be any of the colors from the [XKCD color survey](https://xkcd.com/color/rgb/). The alpha should be a number between 0 and 1. The closer to 0, the more transparent the obstacle will appear. 
-
-    obstacle
-        color: xkcd_color
-        alpha: 0-1
-
+You can view all of the code related to this project on our Github: https://github.com/BrianBock/ENPM661-Project3-Phase-4
