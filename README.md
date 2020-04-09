@@ -35,13 +35,17 @@ Read the [Phase 3](https://github.com/BrianBock/ENPM661-Project3-Phase-3) docume
 
 
 
-
+Minor positioning errors compound over long sequences of moves, causing the second video to have siginifcant positional errors. 
 
 ## Videos
 
 Video 1 (Angled view) - https://youtu.be/_ZxGPbN_xco
+
 Video 1 (Top View) - https://youtu.be/LnL1jkQIxTE
 
+Minor errors (not noticable in the short sequence of video 1) compound over long sequences of moves, causing the second video to have siginifcant positional errors. 
+
+Video 2 - https://youtu.be/nPD7iIGRZ5Q
 
 
 

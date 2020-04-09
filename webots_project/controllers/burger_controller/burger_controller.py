@@ -8,7 +8,7 @@ import math
 Fast=2
 Slow=1
 moveTime=3
-path_file='path_file-s(895, 1600, 90)-g(5000, 1600)-2,1-t3.npz'
+path_file='path_file-s(1035, 700, 90)-g(9300, 7600)-2,1-t3.npz'
 
 
 def move(leftMotor, rightMotor,moveTime, leftSpeed,rightSpeed):
@@ -17,7 +17,7 @@ def move(leftMotor, rightMotor,moveTime, leftSpeed,rightSpeed):
     leftMotor.setVelocity(leftSpeed)
     rightMotor.setVelocity(rightSpeed)
     # robot.step(moveTime*1000/timestep)
-    robot.step(moveTime*1000*2)
+    robot.step(moveTime*2000)
     print("Stopping!")
     leftMotor.setVelocity(0)
     rightMotor.setVelocity(0)
