@@ -11,21 +11,26 @@ moveTime=3
 path_file='path_file-s(895, 1600, 90)-g(5000, 1600)-2,1-t3.npz'
 
 
-def move(moveTime, TIME_STEP, leftSpeed,rightSpeed):
+def move(leftMotor, rightMotor,moveTime, leftSpeed,rightSpeed):
+    print("Moving!")
         # write actuators inputs
     leftMotor.setVelocity(leftSpeed)
     rightMotor.setVelocity(rightSpeed)
     # robot.step(moveTime*1000/timestep)
-    robot.step(moveTime*1000)
-
+    robot.step(moveTime*1000*2)
+    print("Stopping!")
     leftMotor.setVelocity(0)
     rightMotor.setVelocity(0)
 
-    robot.step(50)
+    robot.step(1000)
 
 
+def stop():
+    leftMotor.setVelocity(0)
+    rightMotor.setVelocity(0)
 
-MAX_SPEED = 6.28
+
+# MAX_SPEED = 6.28
 
 # create the Robot instance.
 robot = Robot()
@@ -54,7 +59,7 @@ print(timestep)
 # Load the save file from Phase 3
 if os.path.exists(path_file):
     with np.load(path_file) as data:
-        action_list = data['path_moves']
+        action_list = data['actions']
 else:
     print("Unable to import '"+path_file+"'. Please check that this file exists and then restart this program.")
     exit()
@@ -62,12 +67,12 @@ else:
 # action_list=['FastFast','FastSlow','SlowFast']
 
 
-    #action_list is an ordered list of actions
+# # #     #action_list is an ordered list of actions
 for i,direction in enumerate(action_list):
-    print(direction)
+    # print(direction)
     if direction == "FastFast":
         ul=Fast
-        ur=Slow
+        ur=Fast
     elif direction == "FastSlow":
         ul=Fast
         ur=Slow
@@ -93,7 +98,12 @@ for i,direction in enumerate(action_list):
     # Drive the Robt
     print(i)
     print(direction)
-    move(moveTime,timestep,ul, ur)
+
+# ul=Fast
+# ur=0
+
+    move(leftMotor, rightMotor, moveTime,ul, ur)
+# stop()
     
 
 print("done")
