@@ -25,7 +25,7 @@ def move(moveTime, TIME_STEP, leftSpeed,rightSpeed):
 
 
 
-MAX_SPEED = 6.28
+# MAX_SPEED = 6.28
 
 # create the Robot instance.
 robot = Robot()
